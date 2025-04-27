@@ -4,6 +4,7 @@ import Controls from './components/Controls';
 import WelcomePage from './components/WelcomePage';
 import Modal from './components/Modal';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './styles/styles.css';
 
 const App = () => {
@@ -12,6 +13,7 @@ const App = () => {
     const [gameStarted, setGameStarted] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [collisionType, setCollisionType] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (gameStarted) {
@@ -29,19 +31,19 @@ const App = () => {
 
     const handleMove = (updatedState) => {
         console.log('Updated state:', updatedState);
-    
+
         // Check if ccPosition matches any pirate position
         const ccPosition = updatedState.ccPosition;
         const pirates = updatedState.pirates;
         let collisionDetected = false;
-    
+
         for (let pirate of pirates) {
             if (ccPosition[0] === pirate.position[0] && ccPosition[1] === pirate.position[1]) {
                 collisionDetected = true;
                 break;
             }
         }
-    
+
         if (collisionDetected) {
             setCollisionType("pirate");
             setNotification("Hijacked! Your voyage ends in pirate chains.. Begin again!");
@@ -66,10 +68,10 @@ const App = () => {
             }
             setModalVisible(true);
         }
-    
+
         setGameState(updatedState);
     };
-    
+
 
     const handleStart = () => {
         setGameStarted(true);
@@ -88,6 +90,11 @@ const App = () => {
         }
     };
 
+    const handleGoBack = () => {
+        setGameStarted(false);
+        // navigate('/');
+    };
+
     return (
         <div className="App">
             {!gameStarted ? (
@@ -96,6 +103,12 @@ const App = () => {
                 <>
                     <Modal show={modalVisible} message={notification} onClose={closeModal} />
                     <div className="game-container">
+
+                        <button className="go-back-button"
+                            onClick={handleGoBack}>
+                            ⬅ Go Back
+                        </button>
+
                         <Controls onMove={handleMove} />
                         <GameGrid gameState={gameState} />
                     </div>
