@@ -18,6 +18,7 @@ const App = () => {
     const [collisionType, setCollisionType] = useState('');
     const navigate = useNavigate();
     const [showBalloonShower, setShowBalloonShower] = useState(false);
+    const [tempMessage, setTempMessage] = useState('');
 
     useEffect(() => {
         if (gameStarted) {
@@ -66,8 +67,13 @@ const App = () => {
                     setNotification("Hijacked! Your voyage ends in pirate chains.. Begin again!");
                     break;
                 case "island":
-                    setNotification("Oops! Island ahead! Change your way.");
-                    break;
+                    // setNotification("Oops! Island ahead! Change your way.");
+                    if (setTempMessage) {
+                        setTempMessage("Oops! Island ahead! Change your way.");
+                        setTimeout(() => setTempMessage(''), 1500);
+                    }
+                    return;
+                // break;
                 default:
                     setNotification("");
             }
@@ -102,11 +108,19 @@ const App = () => {
 
     const handleGoBack = () => {
         setGameStarted(false);
-        // navigate('/');
     };
 
     return (
         <div className="App">
+
+            {tempMessage && (
+                <div className="toast-message">
+                    {tempMessage}
+                </div>
+            )}
+
+
+
             {!gameStarted ? (
                 <WelcomePage onStart={handleStart} />
             ) : (
@@ -116,7 +130,7 @@ const App = () => {
                         { className: 'balloon' },
                         { className: 'hurray-thread' }
                     ]} />
-                    
+
                     <Modal show={modalVisible} message={notification} onClose={closeModal} />
                     <div className="game-container">
 
@@ -125,7 +139,9 @@ const App = () => {
                             ⬅ Go Back
                         </button>
 
-                        <Controls onMove={handleMove} />
+                        <Controls onMove={handleMove} showTempMessage={setTempMessage} />
+
+
                         <GameGrid gameState={gameState} />
                     </div>
                 </>

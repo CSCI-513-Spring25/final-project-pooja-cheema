@@ -2,7 +2,9 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import '../styles/Controls.css';
 
-const Controls = ({ onMove }) => {
+// const Controls = ({ onMove }) => {
+const Controls = ({ onMove, showTempMessage }) => {
+
     const move = async (direction) => {
         try {
             const response = await axios.post('http://localhost:8080/api/move', null, {
@@ -12,8 +14,16 @@ const Controls = ({ onMove }) => {
             });
             if (response.data) {
                 onMove(response.data); // Pass the updated state to the parent component
-            } else {
-                alert("Oops! Island ahead! Change your way.");
+            }
+            else {
+                // alert("Oops! Island ahead! Change your way.");
+
+                if (showTempMessage) {
+                    showTempMessage("Oops! Island! Change your way.");
+                    setTimeout(() => showTempMessage(''), 1500); // Message disappears after 1.5 seconds
+                }
+
+
             }
         } catch (error) {
             console.error("Error moving:", error);
@@ -54,7 +64,7 @@ const Controls = ({ onMove }) => {
             <button className="down-button" onClick={() => move('down')}>Down</button>
         </div>
     );
-    
+
 };
 
 export default Controls;
