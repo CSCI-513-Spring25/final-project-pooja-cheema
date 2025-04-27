@@ -2,10 +2,13 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import '../styles/Controls.css';
 
-// const Controls = ({ onMove }) => {
-const Controls = ({ onMove, showTempMessage }) => {
+const Controls = ({ onMove, showTempMessage, modalVisible }) => {
 
     const move = async (direction) => {
+
+        if (modalVisible) return; // Prevent movement if modal is visible
+
+
         try {
             const response = await axios.post('http://localhost:8080/api/move', null, {
                 params: {
@@ -31,6 +34,9 @@ const Controls = ({ onMove, showTempMessage }) => {
     };
 
     const handleKeyPress = (event) => {
+
+        if (modalVisible) return; // Prevent movement if modal is visible
+        
         switch (event.key) {
             case 'ArrowUp':
                 move('up');
@@ -54,7 +60,7 @@ const Controls = ({ onMove, showTempMessage }) => {
         return () => {
             window.removeEventListener('keydown', handleKeyPress);
         };
-    }, []);
+    }, [modalVisible]);
 
     return (
         <div className="controls">

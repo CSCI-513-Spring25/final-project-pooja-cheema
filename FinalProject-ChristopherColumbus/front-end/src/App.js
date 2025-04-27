@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import GameGrid from './components/GameGrid';
 import Controls from './components/Controls';
-
 import WinCelebration from './components/WinCelebration';
-
 import WelcomePage from './components/WelcomePage';
 import Modal from './components/Modal';
 import axios from 'axios';
@@ -86,6 +84,7 @@ const App = () => {
 
     const handleStart = () => {
         setGameStarted(true);
+        setGameState(null);
         axios.post('http://localhost:8080/api/start');
     };
 
@@ -103,6 +102,13 @@ const App = () => {
         else if (collisionType === "treasure") {
             setGameStarted(false);
             setShowBalloonShower(false);
+
+            // setGameState(prevState => ({
+            //     ...prevState,
+            //     ccPosition: [0, 0]
+            // }));
+
+
         }
     };
 
@@ -119,13 +125,10 @@ const App = () => {
                 </div>
             )}
 
-
-
             {!gameStarted ? (
                 <WelcomePage onStart={handleStart} />
             ) : (
                 <>
-
                     <WinCelebration show={showBalloonShower} items={[
                         { className: 'balloon' },
                         { className: 'hurray-thread' }
@@ -139,8 +142,7 @@ const App = () => {
                             ⬅ Go Back
                         </button>
 
-                        <Controls onMove={handleMove} showTempMessage={setTempMessage} />
-
+                        <Controls onMove={handleMove} modalVisible={modalVisible} showTempMessage={setTempMessage} />
 
                         <GameGrid gameState={gameState} />
                     </div>
