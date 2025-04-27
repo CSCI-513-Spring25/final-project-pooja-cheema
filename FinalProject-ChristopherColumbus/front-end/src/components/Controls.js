@@ -54,6 +54,7 @@ const Controls = ({ onMove }) => {
             <button className="down-button" onClick={() => move('down')}>Down</button>
         </div>
     );
+    
 };
 
 export default Controls;

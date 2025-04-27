@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import GameGrid from './components/GameGrid';
 import Controls from './components/Controls';
+
+import WinCelebration from './components/WinCelebration';
+
 import WelcomePage from './components/WelcomePage';
 import Modal from './components/Modal';
 import axios from 'axios';
@@ -14,6 +17,7 @@ const App = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [collisionType, setCollisionType] = useState('');
     const navigate = useNavigate();
+    const [showBalloonShower, setShowBalloonShower] = useState(false);
 
     useEffect(() => {
         if (gameStarted) {
@@ -53,6 +57,7 @@ const App = () => {
             switch (updatedState.collision) {
                 case "treasure":
                     setNotification("Yay!! You have arrived.");
+                    setShowBalloonShower(true);
                     break;
                 case "monster":
                     setNotification("Chomp! The sea monster got you. Restart your voyage.");
@@ -82,11 +87,16 @@ const App = () => {
         setModalVisible(false);
         if (collisionType === "pirate") {
             setGameStarted(false);
-        } else if (collisionType === "monster") {
+        }
+        else if (collisionType === "monster") {
             setGameState(prevState => ({
                 ...prevState,
                 ccPosition: [0, 0]
             }));
+        }
+        else if (collisionType === "treasure") {
+            setGameStarted(false);
+            setShowBalloonShower(false);
         }
     };
 
@@ -101,6 +111,12 @@ const App = () => {
                 <WelcomePage onStart={handleStart} />
             ) : (
                 <>
+
+                    <WinCelebration show={showBalloonShower} items={[
+                        { className: 'balloon' },
+                        { className: 'hurray-thread' }
+                    ]} />
+                    
                     <Modal show={modalVisible} message={notification} onClose={closeModal} />
                     <div className="game-container">
 
