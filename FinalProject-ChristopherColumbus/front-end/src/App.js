@@ -20,17 +20,30 @@ const App = () => {
 
     useEffect(() => {
         if (gameStarted) {
-            const fetchInitialState = async () => {
-                try {
-                    const response = await axios.get('http://localhost:8080/api/state');
-                    setGameState(response.data);
-                } catch (error) {
-                    console.error("Error fetching initial state:", error);
-                }
-            };
-            fetchInitialState();
+            const intervalId = setInterval(() => {
+                axios.get('http://localhost:8080/api/state')
+                    .then(response => setGameState(response.data))
+                    .catch(error => console.error("Polling error:", error));
+            }, 1000); // Poll every second
+
+            return () => clearInterval(intervalId);
         }
     }, [gameStarted]);
+
+
+
+    useEffect(() => {
+
+        // Only pause/resume if game has started
+        if (!gameStarted) return;
+
+        if (modalVisible) {
+            axios.post('http://localhost:8080/api/pause');
+        } else {
+            axios.post('http://localhost:8080/api/resume');
+        }
+    }, [modalVisible, gameStarted]);
+    
 
     const handleMove = (updatedState) => {
         console.log('Updated state:', updatedState);
@@ -55,19 +68,19 @@ const App = () => {
             setCollisionType(updatedState.collision);
             switch (updatedState.collision) {
                 case "treasure":
-                    setNotification("Yay!! You have arrived.");
+                    setNotification("Yay!! Reached the treasure!");
                     setShowBalloonShower(true);
                     break;
                 case "monster":
-                    setNotification("Chomp! The sea monster got you. Restart your voyage.");
+                    setNotification("Chomp! The sea monster got you. Restart from Cell 1.");
                     break;
                 case "pirate":
                     setNotification("Hijacked! Your voyage ends in pirate chains.. Begin again!");
                     break;
                 case "island":
-                    // setNotification("Oops! Island ahead! Change your way.");
+                    // setNotification("Island ahead! Change your way.");
                     if (setTempMessage) {
-                        setTempMessage("Oops! Island ahead! Change your way.");
+                        setTempMessage("Island ahead! Change your way.");
                         setTimeout(() => setTempMessage(''), 1500);
                     }
                     return;
@@ -102,13 +115,6 @@ const App = () => {
         else if (collisionType === "treasure") {
             setGameStarted(false);
             setShowBalloonShower(false);
-
-            // setGameState(prevState => ({
-            //     ...prevState,
-            //     ccPosition: [0, 0]
-            // }));
-
-
         }
     };
 

@@ -8,7 +8,6 @@ const Controls = ({ onMove, showTempMessage, modalVisible }) => {
 
         if (modalVisible) return; // Prevent movement if modal is visible
 
-
         try {
             const response = await axios.post('http://localhost:8080/api/move', null, {
                 params: {
@@ -36,7 +35,7 @@ const Controls = ({ onMove, showTempMessage, modalVisible }) => {
     const handleKeyPress = (event) => {
 
         if (modalVisible) return; // Prevent movement if modal is visible
-        
+
         switch (event.key) {
             case 'ArrowUp':
                 move('up');

@@ -13,7 +13,7 @@
     /* rounded corners for nicer look */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     /* subtle shadow */
-    /*margin-bottom: 20px; /* space between image and button */
+    /* margin-bottom: 0px; /* space between image and button */
 }
 
 .start-button {

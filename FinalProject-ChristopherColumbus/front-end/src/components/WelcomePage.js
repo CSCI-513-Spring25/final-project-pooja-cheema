@@ -3,8 +3,6 @@ import React, { useEffect } from 'react';
 import '../styles/welcome.css';
 
 const WelcomePage = ({ onStart }) => {
-
-
     useEffect(() => {
         const handleKeyPress = (event) => {
             if (event.key === 'Enter') {

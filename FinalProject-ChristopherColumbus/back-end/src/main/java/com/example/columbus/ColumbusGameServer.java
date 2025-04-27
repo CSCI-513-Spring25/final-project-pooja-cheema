@@ -6,10 +6,8 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * This class extends NanoHTTPD to provide a REST API for Christopher Columbus
- * game.
- * It handles HTTP requests for starting the game, moving ships, and getting
- * game state.
+ * This class extends NanoHTTPD to provide a REST API for Christopher Columbus game.
+ * It handles HTTP requests for starting the game, moving ships, and getting game state.
  */
 public class ColumbusGameServer extends NanoHTTPD {
     private Game game; // Singleton instance of game logic
@@ -59,6 +57,20 @@ public class ColumbusGameServer extends NanoHTTPD {
             GameState state = game.getState();
             System.out.println("State: " + state.toJson());
             response = newFixedLengthResponse(Response.Status.OK, "application/json", state.toJson());
+        }
+
+        // Handle POST /api/pause: pause monster movement
+        else if (uri.equals("/api/pause") && method == Method.POST) {
+            game.stopMonsterMovement();
+            response = newFixedLengthResponse(Response.Status.OK, "application/json",
+                    "{\"status\":\"Monster movement paused\"}");
+        }
+
+        // Handle POST /api/resume: resume monster movement
+        else if (uri.equals("/api/resume") && method == Method.POST) {
+            game.startMonsterMovement();
+            response = newFixedLengthResponse(Response.Status.OK, "application/json",
+                    "{\"status\":\"Monster movement resumed\"}");
         }
 
         // Handle any other routes: return 404
