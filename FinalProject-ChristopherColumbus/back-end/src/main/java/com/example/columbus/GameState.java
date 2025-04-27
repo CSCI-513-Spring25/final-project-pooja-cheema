@@ -16,6 +16,7 @@ public class GameState {
     private List<SeaMonster> seaMonsters; // List of sea monsters
     private List<int[]> islands; // Positions of all islands
     private String collision; // Information about collision of CC with island/monster/pirate
+    private boolean[][] occupiedPositions; // 10x10 grid to track occupied positions
 
     /*
      * GameState constructor to capture current game state
@@ -37,6 +38,9 @@ public class GameState {
                 .collect(Collectors.toList());
         this.islands = islands;
         this.collision = collision;
+
+        this.occupiedPositions = new boolean[10][10]; // Initialize the grid
+        updateOccupiedPositions(); // Update occupied positions initially
 
         // Print info for logging
         System.out.println("this.collision: " + collision);
@@ -80,6 +84,80 @@ public class GameState {
     public String getCollision() {
         return collision;
     }
+
+
+
+    // Method to check if a position is occupied
+    public boolean isOccupied(int[] position) {
+        return occupiedPositions[position[0]][position[1]];
+    }
+
+    // Method to mark a position as occupied
+    public void markPositionOccupied(int[] position) {
+        occupiedPositions[position[0]][position[1]] = true;
+    }
+
+    // Method to set a position as occupied
+    public void setOccupied(int[] position, boolean occupied) {
+        occupiedPositions[position[0]][position[1]] = occupied;
+    }
+
+    // Method to check if a position is occupied by a fast pirate
+    public boolean isOccupiedByFastPirate(int[] position) {
+        for (PirateShipState pirate : pirates) {
+            if (pirate.getType().equals("fast") && pirate.getPosition()[0] == position[0] && pirate.getPosition()[1] == position[1]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+    // Method to update occupied positions based on current state
+    private void updateOccupiedPositions() {
+        // Clear the grid
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                occupiedPositions[i][j] = false;
+            }
+        }
+
+        // Mark positions occupied by pirates
+        for (PirateShipState pirate : pirates) {
+            occupiedPositions[pirate.getPosition()[0]][pirate.getPosition()[1]] = true;
+        }
+
+        // Mark positions occupied by sea monsters
+        for (SeaMonster monster : seaMonsters) {
+            occupiedPositions[monster.getPosition()[0]][monster.getPosition()[1]] = true;
+        }
+
+        // Mark positions occupied by islands
+        for (int[] island : islands) {
+            occupiedPositions[island[0]][island[1]] = true;
+        }
+
+        // Mark position occupied by CC
+        occupiedPositions[ccPosition[0]][ccPosition[1]] = true;
+    }
+
+
+    // Method to update the position of a pirate
+    public void updatePiratePosition(int[] oldPosition, int[] newPosition) {
+        setOccupied(oldPosition, false);
+        setOccupied(newPosition, true);
+        updateOccupiedPositions();
+    }
+
+    // Method to update the position of a sea monster
+    public void updateSeaMonsterPosition(int[] oldPosition, int[] newPosition) {
+        setOccupied(oldPosition, false);
+        setOccupied(newPosition, true);
+        updateOccupiedPositions();
+    }
+
+
 
     /*
      * This inner class represents the state of a pirate ship

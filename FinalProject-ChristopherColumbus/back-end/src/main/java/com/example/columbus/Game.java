@@ -61,6 +61,9 @@ public class Game {
      * and notifies observers (pirates) after CC's move
      */
     public GameState move(String direction) {
+
+        System.out.println("CC moving " + direction);
+
         int[] newPosition = ccPosition.clone();
 
         // Compute new position based on direction
@@ -155,6 +158,9 @@ public class Game {
             SeaMonster monster = new SeaMonster();
             placeEntity(monster);
             monsterGroup.addEntity(monster);
+
+            addObserver(monster);
+
         }
         monsters.addAll(monsterGroup.getEntities());
     }
@@ -164,7 +170,7 @@ public class Game {
      */
     private void createIslands() {
         Random random = new Random();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 5; i++) {
             int[] position;
             do {
                 position = new int[] { random.nextInt(GRID_SIZE), random.nextInt(GRID_SIZE) };
@@ -214,7 +220,9 @@ public class Game {
      * but not on an occupied cell, or adjacent to CC's cell
      */
     private void placeEntity(Entity entity) {
+
         Random random = new Random();
+        
         int[] position;
         do {
             position = new int[] { random.nextInt(GRID_SIZE), random.nextInt(GRID_SIZE) };
