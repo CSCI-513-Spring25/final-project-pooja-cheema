@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class ChaseStrategyTest {
+public class ChaseStrategyTest {
 
     private ChaseStrategy chaseStrategy;
     private PirateShip mockPirateShip;

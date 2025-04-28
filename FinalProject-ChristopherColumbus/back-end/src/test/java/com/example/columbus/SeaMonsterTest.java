@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class SeaMonsterTest {
+public class SeaMonsterTest {
 
     private SeaMonster seaMonster;
     private Game mockGame;

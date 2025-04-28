@@ -10,7 +10,7 @@ import static org.mockito.Mockito.*;
 import java.lang.reflect.Field;
 
 
-class SlowPirateShipTest {
+public class SlowPirateShipTest {
 
     private SlowPirateShip slowPirateShip;
     private Game mockGame;
