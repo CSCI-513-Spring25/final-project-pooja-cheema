@@ -14,7 +14,7 @@ public class ChaseStrategyTest {
     private GameState mockGameState;
 
     @BeforeEach
-    void setUp() throws Exception {
+    public void setUp() throws Exception {
         // Initialize the ChaseStrategy
         chaseStrategy = new ChaseStrategy();
 
@@ -29,7 +29,7 @@ public class ChaseStrategyTest {
     }
 
     @Test
-    void testMoveTowardsCC() {
+    public void testMoveTowardsCC() {
         // Set up CC and pirate ship positions
         when(mockGameState.getCcPosition()).thenReturn(new int[]{10, 10});
         int[] piratePosition = new int[]{5, 5};
@@ -43,7 +43,7 @@ public class ChaseStrategyTest {
     }
 
     @Test
-    void testAvoidOccupiedPosition() {
+    public void testAvoidOccupiedPosition() {
         // Set up CC and pirate ship positions
         when(mockGameState.getCcPosition()).thenReturn(new int[]{10, 10});
         int[] piratePosition = new int[]{5, 5};
@@ -61,7 +61,7 @@ public class ChaseStrategyTest {
     }
 
     @Test
-    void testAvoidCCPosition() {
+    public void testAvoidCCPosition() {
         // Set up CC and pirate ship positions
         when(mockGameState.getCcPosition()).thenReturn(new int[]{6, 5});
         int[] piratePosition = new int[]{5, 5};
@@ -75,7 +75,7 @@ public class ChaseStrategyTest {
     }
 
     @Test
-    void testStayInBounds() {
+    public void testStayInBounds() {
         // Set up CC and pirate ship positions
         when(mockGameState.getCcPosition()).thenReturn(new int[]{0, 0});
         int[] piratePosition = new int[]{0, 19};

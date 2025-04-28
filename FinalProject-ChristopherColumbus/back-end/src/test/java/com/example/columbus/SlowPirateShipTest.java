@@ -17,7 +17,7 @@ public class SlowPirateShipTest {
     private GameState mockGameState;
 
     @BeforeEach
-    void setUp() throws Exception {
+    public void setUp() throws Exception {
         // Mock the Game and GameState classes
         mockGame = mock(Game.class);
         mockGameState = mock(GameState.class);
@@ -31,7 +31,7 @@ public class SlowPirateShipTest {
     }
 
     @Test
-    void testMoveTowardsCCAbove() {
+    public void testMoveTowardsCCAbove() {
         // Set CC position above the pirate
         when(mockGameState.getCcPosition()).thenReturn(new int[]{3, 5});
         when(mockGame.isOccupied(any(int[].class))).thenReturn(false);
@@ -44,7 +44,7 @@ public class SlowPirateShipTest {
     }
 
     @Test
-    void testMoveTowardsCCBelow() {
+    public void testMoveTowardsCCBelow() {
         // Set CC position below the pirate
         when(mockGameState.getCcPosition()).thenReturn(new int[]{7, 5});
         when(mockGame.isOccupied(any(int[].class))).thenReturn(false);
@@ -57,7 +57,7 @@ public class SlowPirateShipTest {
     }
 
     @Test
-    void testMoveTowardsCCLeft() {
+    public void testMoveTowardsCCLeft() {
         // Set CC position to the left of the pirate
         when(mockGameState.getCcPosition()).thenReturn(new int[]{5, 3});
         when(mockGame.isOccupied(any(int[].class))).thenReturn(false);
@@ -70,7 +70,7 @@ public class SlowPirateShipTest {
     }
 
     @Test
-    void testMoveTowardsCCRight() {
+    public void testMoveTowardsCCRight() {
         // Set CC position to the right of the pirate
         when(mockGameState.getCcPosition()).thenReturn(new int[]{5, 7});
         when(mockGame.isOccupied(any(int[].class))).thenReturn(false);
@@ -83,7 +83,7 @@ public class SlowPirateShipTest {
     }
 
     @Test
-    void testMoveAvoidsOccupiedPosition() {
+    public void testMoveAvoidsOccupiedPosition() {
         // Set CC position below the pirate
         when(mockGameState.getCcPosition()).thenReturn(new int[]{7, 5});
         when(mockGame.isOccupied(new int[]{6, 5})).thenReturn(true); // Mark the position as occupied
@@ -97,7 +97,7 @@ public class SlowPirateShipTest {
     }
 
     @Test
-    void testGetType() {
+    public void testGetType() {
         // Verify the type of the ship
         assertEquals("slow", slowPirateShip.getType());
     }
