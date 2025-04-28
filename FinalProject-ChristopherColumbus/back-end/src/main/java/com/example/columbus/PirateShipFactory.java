@@ -17,6 +17,12 @@ public class PirateShipFactory {
         else if (type.equals("slow")) {
             return new SlowPirateShip(); // Return slow pirate ship
         }
+
+        else if (type.equals("patrol")) {
+            return new PatrolPirateShip(); // Return slow pirate ship
+        }
+        
+
         return null; // Return null if type is not recognized
     }
 }

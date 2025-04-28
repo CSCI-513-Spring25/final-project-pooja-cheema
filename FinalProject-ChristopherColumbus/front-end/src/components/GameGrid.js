@@ -11,11 +11,19 @@ const GameGrid = ({ gameState }) => {
 
     useEffect(() => {
         if (gameState) {
-            setCcPosition(gameState.ccPosition);
-            setTreasurePosition(gameState.treasurePosition);
-            setPirates(gameState.pirates.map(p => ({ position: p.position, type: p.type })));
-            setMonsters(gameState.seaMonsters.map(m => m.position));
-            setIslands(gameState.islands);
+
+
+            setCcPosition(Array.isArray(gameState.ccPosition) ? gameState.ccPosition : [0, 0]);
+        setTreasurePosition(Array.isArray(gameState.treasurePosition) ? gameState.treasurePosition : [9, 9]);
+        setPirates(Array.isArray(gameState.pirates) ? gameState.pirates.map(p => ({ position: p.position, type: p.type })) : []);
+        setMonsters(Array.isArray(gameState.seaMonsters) ? gameState.seaMonsters.map(m => m.position) : []);
+        setIslands(Array.isArray(gameState.islands) ? gameState.islands : []);
+
+            // setCcPosition(gameState.ccPosition);
+            // setTreasurePosition(gameState.treasurePosition);
+            // setPirates(gameState.pirates.map(p => ({ position: p.position, type: p.type })));
+            // setMonsters(gameState.seaMonsters.map(m => m.position));
+            // setIslands(gameState.islands);
         }
     }, [gameState]);
 
@@ -28,7 +36,18 @@ const GameGrid = ({ gameState }) => {
         }
         const pirate = pirates.find(p => p.position[0] === rowIndex && p.position[1] === cellIndex);
         if (pirate) {
-            return <img src={pirate.type === 'fast' ? '/images/pirateship2.png' : '/images/pirateShip.png'} alt="Pirate" className='pirate-ship' />;
+
+            // return <img src={pirate.type === 'fast' ? '/images/pirateship2.png' : '/images/pirateShip.png'} alt="Pirate" className='pirate-ship' />;
+
+
+
+            let pirateImg = '/images/pirateShip.png'; // default
+            // if (pirate.type === 'slow') pirateImg = '/images/pirateShip.png';
+    if (pirate.type === 'fast') pirateImg = '/images/pirateship2.png';
+    else if (pirate.type === 'patrol') pirateImg = '/images/fast_pirate.png'; 
+
+    return <img src={pirateImg} alt={pirate.type + " Pirate"} className='pirate-ship' />;
+
         }
         if (monsters.some(m => m[0] === rowIndex && m[1] === cellIndex)) {
             return <img src="/images/monster.png" alt="Monster" className='monster' />;

@@ -1,6 +1,7 @@
 package com.example.columbus;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -10,8 +11,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * This class acts as main model for the CC game.
@@ -28,7 +27,10 @@ public class Game {
     private static Game instance; // Singleton instance
     private static final int GRID_SIZE = 10; // Size of grid
     private int[] ccPosition = { 0, 0 }; // CC initial ship position
-    private int[] treasurePosition = { 9, 9 }; // Treasure position
+    // private int[] treasurePosition = { 9, 9 }; // Treasure position
+
+    private int[] treasurePosition; // Treasure position
+
     private List<PirateShip> pirates = new ArrayList<>(); // List of Pirate Ships
     private List<Entity> monsters = new ArrayList<>(); // List of sea monsters
     private List<int[]> islands = new ArrayList<>(); // List of island positions
@@ -37,6 +39,10 @@ public class Game {
 
     private ScheduledExecutorService monsterMover; // Executor for scheduling monster movements
     // private Timer monsterTimer;
+
+    private ScheduledExecutorService patrolScheduler; // Scheduler for patrolling pirate
+
+    private PatrolPirateShip patrolPirate; // Keep track of patrol ship
 
     // Private constructor for singleton
     private Game() {
@@ -49,24 +55,36 @@ public class Game {
     /*
      * This method returns singleton instance of Game class
      */
-    public static Game getInstance() {
+    // public static Game getInstance() {
+    public static synchronized Game getInstance() {
         if (instance == null) {
             instance = new Game();
         }
         return instance;
     }
 
-    /*
-     * This method starts or resets the game to initial state
-     */
-    public void start() {
-        ccPosition = new int[] { 0, 0 }; // Ensure CC starts at [0, 0]
+    public synchronized void start() {
+        ccPosition = new int[] { 0, 0 };
         occupiedPositions.clear();
         occupiedPositions.add("0,0");
-        resetEntities(); // Randomly place entities
-        notifyObservers(); // Notify pirates about CC's ship position
+        pirates.clear();
+        monsters.clear();
+        islands.clear();
+        observers.clear();
 
-        startMonsterMovement(); // Automatically start monster movement
+        Random random = new Random();
+    do {
+        treasurePosition = new int[] { random.nextInt(GRID_SIZE), random.nextInt(GRID_SIZE) };
+    } while (occupiedPositions.contains(treasurePosition[0] + "," + treasurePosition[1]));
+    occupiedPositions.add(treasurePosition[0] + "," + treasurePosition[1]);
+
+        createPirates();
+        createMonsters();
+        createIslands();
+        notifyObservers();
+
+        startMonsterMovement();
+        startPatrollingPirate();
     }
 
     /*
@@ -75,7 +93,7 @@ public class Game {
      * pirate/monster/treasure,
      * and notifies observers (pirates) after CC's move
      */
-    public GameState move(String direction) {
+    public synchronized GameState move(String direction) {
 
         System.out.println("CC moving " + direction);
 
@@ -104,8 +122,7 @@ public class Game {
             }
         }
 
-        // Check if the new position is a sea monster, then CC goes back to initial
-        // position(0,0)
+        // Check if the new position is a sea monster, then CC goes back to initial position(0,0)
         for (Entity monster : monsters) {
             if (monster.getPosition()[0] == newPosition[0] && monster.getPosition()[1] == newPosition[1]) {
                 ccPosition = new int[] { 0, 0 }; // Reset CC position
@@ -114,23 +131,25 @@ public class Game {
             }
         }
 
-        // Check if the new position is a pirate ship, (means CC ship hijacked) then
-        // reset the game
+        // Check if the new position is a pirate ship, (means CC ship hijacked) then reset the game
         for (PirateShip pirate : pirates) {
             if (pirate.getPosition()[0] == newPosition[0] && pirate.getPosition()[1] == newPosition[1]) {
 
                 stopMonsterMovement();
+                stopPatrollingPirate();
 
                 start(); // Reset the game
                 notifyObservers();
                 return new GameState(ccPosition, treasurePosition, pirates, monsters, islands, "pirate");
             }
         }
+ 
 
         // Check if the new position is the treasure, then CC wins
         if (newPosition[0] == treasurePosition[0] && newPosition[1] == treasurePosition[1]) {
 
             stopMonsterMovement();
+            stopPatrollingPirate();
 
             return new GameState(ccPosition, treasurePosition, pirates, monsters, islands, "treasure");
         }
@@ -146,7 +165,7 @@ public class Game {
     /*
      * This method returns the current state of the game
      */
-    public GameState getState() {
+    public synchronized GameState getState() {
         return new GameState(ccPosition, treasurePosition, pirates, monsters, islands, null);
     }
 
@@ -170,6 +189,14 @@ public class Game {
         pirates.add(slowPirate);
         addObserver(slowPirate);
         // }
+
+        // Create one patrol pirate ship (scheduler based)
+        patrolPirate = (PatrolPirateShip) PirateShipFactory.createPirateShip("patrol");
+        patrolPirate.setStrategy(new PatrolStrategy());
+        placeEntity(patrolPirate);
+        pirates.add(patrolPirate);
+        // addObserver(fastPirate);
+
     }
 
     /*
@@ -227,6 +254,17 @@ public class Game {
             placeEntity(monster);
         }
 
+
+        // Reset patrol pirate's position and patrol state
+        if (patrolPirate != null) {
+            // patrolPirate.setPosition(new int[] { 0, 0 }); // Or use placeEntity(patrolPirate) for random
+            placeEntity(patrolPirate);
+            patrolPirate.setMode(0);
+            patrolPirate.setCol(0);
+            patrolPirate.setRow(0);
+            // occupiedPositions.add("0,0");
+        }
+
         // Reset island positions
         islands.clear();
         for (int i = 0; i < 5; i++) {
@@ -261,15 +299,16 @@ public class Game {
      * to prevent very early collision at the start of the game
      */
     private boolean isAdjacentToCC(int[] position) {
-        return (position[0] == 0 && position[1] == 1) || (position[0] == 1 && position[1] == 0)
-                || (position[0] == 1 && position[1] == 1);
+        return (position[0] == 0 && position[1] == 1) ||
+                (position[0] == 1 && position[1] == 0) ||
+                (position[0] == 1 && position[1] == 1);
     }
 
     /*
      * This method checks if a grid position is occupied by any entity
      * (CC, islands, pirates, monsters, treasure)
      */
-    public boolean isOccupied(int[] position) {
+    public synchronized boolean isOccupied(int[] position) {
         String posKey = position[0] + "," + position[1];
         return occupiedPositions.contains(posKey);
     }
@@ -277,7 +316,7 @@ public class Game {
     /*
      * This method adds an Observer (implementing Observer Pattern)
      */
-    public void addObserver(Observer observer) {
+    public synchronized void addObserver(Observer observer) {
         observers.add(observer);
     }
 
@@ -285,7 +324,7 @@ public class Game {
      * This method notifies all observers (pirates) of CC's current position
      * (implementing Observer Pattern)
      */
-    public void notifyObservers() {
+    public synchronized void notifyObservers() {
         for (Observer observer : observers) {
             observer.update(ccPosition);
         }
@@ -294,7 +333,8 @@ public class Game {
     /*
      * This method starts time-based movement of monsters.
      * It initializes the scheduler if not already running,
-     * and schedules moveAllMonsters() method to run every specified number of seconds.
+     * and schedules moveAllMonsters() method to run every specified number of
+     * seconds.
      */
     public void startMonsterMovement() {
         if (monsterMover == null || monsterMover.isShutdown()) {
@@ -321,13 +361,47 @@ public class Game {
 
     /*
      * This method moves all moneters by calling their move() method
-     * Synchronized for thread safety since it may be called 
+     * Synchronized for thread safety since it may be called
      * by separate scheduler thread.
      */
     private void moveAllMonsters() {
         synchronized (this) { // Synchronized to ensure thread safety if accessed from multiple threads
             for (Entity monster : monsters) {
                 monster.move();
+            }
+        }
+    }
+
+    public void startPatrollingPirate() {
+        stopPatrollingPirate();
+
+        // Scheduler for auto=move every 2 seconds
+        patrolScheduler = Executors.newSingleThreadScheduledExecutor();
+        patrolScheduler.scheduleAtFixedRate(() -> movePatrolPirate(), 2, 2, TimeUnit.SECONDS);
+
+    }
+
+    public void stopPatrollingPirate() {
+        if (patrolScheduler != null) {
+            patrolScheduler.shutdownNow();
+            patrolScheduler = null;
+        }
+    }
+
+    private void movePatrolPirate() {
+        synchronized (this) {
+            if (patrolPirate != null) {
+                patrolPirate.move();
+
+                // Check for hijack with CC after move:
+                int[] cc = ccPosition;
+                int[] next = patrolPirate.getPosition();
+                if (Arrays.equals(next, cc)) {
+                    // End game: hijack
+                    stopMonsterMovement();
+                    stopPatrollingPirate();
+                    // Optionally: set collision to "pirate" in GameState, or restart
+                }
             }
         }
     }

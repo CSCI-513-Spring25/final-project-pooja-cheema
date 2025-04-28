@@ -51,6 +51,14 @@ public abstract class PirateShip implements Observer, Entity {
         strategy.move(this);
     }
 
+
+    // public void performMove() {
+    //     if (strategy != null) {
+    //         strategy.move(this);
+    //     }
+    // }
+    
+
     /*
      * This method is called when CC position is updated.
      */
