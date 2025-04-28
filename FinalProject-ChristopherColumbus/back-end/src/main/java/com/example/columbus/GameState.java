@@ -42,9 +42,6 @@ public class GameState {
 
         this.occupiedPositions = new boolean[20][20]; // Initialize the grid
         updateOccupiedPositions(); // Update occupied positions initially
-
-        // Print info for logging
-        System.out.println("this.collision: " + collision);
     }
 
     /*

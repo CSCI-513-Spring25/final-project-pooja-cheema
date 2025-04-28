@@ -50,14 +50,12 @@ public class ColumbusGameServer extends NanoHTTPD {
         else if (uri.equals("/api/move") && method == Method.POST) {
             String direction = params.get("direction");
             GameState result = game.move(direction); // Move player and get new state
-            System.out.println("result: " + result.toJson());
             response = newFixedLengthResponse(Response.Status.OK, "application/json", result.toJson());
         }
 
         // Handle GET /api/state: get current state of game
         // else if (uri.equals("/api/state") && method == Method.GET) {
         // GameState state = game.getState();
-        // System.out.println("State: " + state.toJson());
         // response = newFixedLengthResponse(Response.Status.OK, "application/json",
         // state.toJson());
         // }
@@ -70,7 +68,6 @@ public class ColumbusGameServer extends NanoHTTPD {
                 state.setCollision(collision); // GameState must have setCollision(String)
                 game.setCollisionStatus(null); // Only send collision ONCE
             }
-            System.out.println("State: " + state.toJson());
             response = newFixedLengthResponse(Response.Status.OK, "application/json", state.toJson());
         }
 

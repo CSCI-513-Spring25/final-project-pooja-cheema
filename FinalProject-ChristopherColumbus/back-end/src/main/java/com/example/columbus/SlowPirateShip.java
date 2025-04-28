@@ -82,10 +82,6 @@ public class SlowPirateShip extends PirateShip {
     private void updatePosition(int[] newPosition) {
         position[0] = newPosition[0];
         position[1] = newPosition[1];
-
-        // Log movement
-        System.out.println("Slow pirate ship moving to " + position[0] + "," + position[1]);
-        System.out.println("---------------- ");
     }
 
     /*

@@ -24,23 +24,17 @@ public class Game {
     private static Game instance; // Singleton instance
     private static final int GRID_SIZE = 20; // Size of grid
     private int[] ccPosition = { 0, 0 }; // CC initial ship position
-    // private int[] treasurePosition = { 19, 19 }; // Treasure position
+    private int[] treasurePosition = { 19, 19 }; // Treasure position
 
-    private int[] treasurePosition; // Treasure position
-
+    // private int[] treasurePosition; // Treasure position
     private List<PirateShip> pirates = new ArrayList<>(); // List of Pirate Ships
     private List<Entity> monsters = new ArrayList<>(); // List of sea monsters
     private List<int[]> islands = new ArrayList<>(); // List of island positions
     private List<Observer> observers = new ArrayList<>(); // List of Observers
     private Set<String> occupiedPositions = new HashSet<>(); // A set to keep track of occupied grid cells
-
     private String collisionStatus = null;
-
     private ScheduledExecutorService monsterMover; // Executor for scheduling monster movements
-    // private Timer monsterTimer;
-
     private ScheduledExecutorService patrolScheduler; // Scheduler for patrolling pirate
-
     private PatrolPirateShip patrolPirate; // Keep track of patrol ship
 
     // Private constructor for singleton
@@ -105,8 +99,6 @@ public class Game {
      * and notifies observers (pirates) after CC's move
      */
     public synchronized GameState move(String direction) {
-
-        System.out.println("CC moving " + direction);
 
         int[] newPosition = ccPosition.clone();
 
