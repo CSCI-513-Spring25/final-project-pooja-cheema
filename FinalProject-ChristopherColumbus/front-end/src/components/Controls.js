@@ -2,8 +2,16 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import '../styles/Controls.css';
 
+/**
+ * Controls component handles CC movement, supports button clicks and key press for navigation
+ */
 const Controls = ({ onMove, showTempMessage, modalVisible }) => {
 
+    /**
+     * Sends move command to backend server.
+     * Disables movement when modal is active.
+     * Displays toast if next cell if island
+     */
     const move = async (direction) => {
 
         if (modalVisible) return; // Prevent movement if modal is visible
@@ -11,15 +19,15 @@ const Controls = ({ onMove, showTempMessage, modalVisible }) => {
         try {
             const response = await axios.post('http://localhost:8080/api/move', null, {
                 params: {
-                    direction: direction
+                    direction: direction // Pass direction as query param
                 }
             });
             if (response.data) {
-                onMove(response.data); // Pass the updated state to the parent component
+                onMove(response.data); // If response contains new gamestate, pass updated state via callback
             }
             else {
-                // alert("Oops! Island ahead! Change your way.");
 
+                // Show temporary toast message is movement blocked due to island
                 if (showTempMessage) {
                     showTempMessage("Oops! Island! Change your way.");
                     setTimeout(() => showTempMessage(''), 1500); // Message disappears after 1.5 seconds
@@ -32,6 +40,9 @@ const Controls = ({ onMove, showTempMessage, modalVisible }) => {
         }
     };
 
+    /**
+     * Handles arrow key inputs for movement on grid
+     */
     const handleKeyPress = (event) => {
 
         if (modalVisible) return; // Prevent movement if modal is visible
@@ -54,9 +65,13 @@ const Controls = ({ onMove, showTempMessage, modalVisible }) => {
         }
     };
 
+    /**
+     * Registers and cleans up keyboard event listener.
+     * Only active when modal is not visible
+     */
     useEffect(() => {
         window.addEventListener('keydown', handleKeyPress);
-        return () => {
+        return () => { // Clean up on unmount
             window.removeEventListener('keydown', handleKeyPress);
         };
     }, [modalVisible]);
