@@ -1,0 +1,35 @@
+.icon-manual {
+    /* position: absolute; */
+    bottom: 140px;
+    left: 40px;
+    width: 150px;
+    border: 3px solid #cccccc;
+    padding: 10px;
+    background-color: #b2ecee;
+    /* background-color:rgb(255, 255, 96); */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.icon-manual h2 {
+    font-size: 1.2em;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    margin-bottom: 10px;
+}
+
+.icon-manual ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.icon-manual li {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.icon-manual img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
