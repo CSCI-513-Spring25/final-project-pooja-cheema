@@ -9,7 +9,6 @@ public class FastPirateShip extends PirateShip {
      * Move the fast pirate ship towards christopher.
      * Ship moves 2 cells at a time in the direction of CC,
      * avoiding islands
-     * 
      */
     @Override
     public void move() {
@@ -36,7 +35,7 @@ public class FastPirateShip extends PirateShip {
         } 
         
         else if (ccPosition[0] > position[0]) { // CC is below
-            newPosition[0] = Math.min(position[0] + 2, 9); // Move down by 2 cells, not below grid
+            newPosition[0] = Math.min(position[0] + 2, 19); // Move down by 2 cells, not below grid
             if (Game.getInstance().isOccupied(newPosition) || (newPosition[0] == 0 && newPosition[1] == 0)) {
                 
                 // If can't move down, alternatively move left/rigt towards CC
@@ -66,7 +65,7 @@ public class FastPirateShip extends PirateShip {
         } 
         
         else if (ccPosition[1] > position[1]) { // CC is to the right (same row)
-            newPosition[1] = Math.min(position[1] + 2, 9);
+            newPosition[1] = Math.min(position[1] + 2, 19);
             if (Game.getInstance().isOccupied(newPosition) || (newPosition[0] == 0 && newPosition[1] == 0)) {
                 
                 // If can't move right, alternatively move up/down towards CC
@@ -103,13 +102,13 @@ public class FastPirateShip extends PirateShip {
                 newPosition[0] = Math.max(position[0] - 2, 0);
                 break;
             case "down":
-                newPosition[0] = Math.min(position[0] + 2, 9);
+                newPosition[0] = Math.min(position[0] + 2, 19);
                 break;
             case "left":
                 newPosition[1] = Math.max(position[1] - 2, 0);
                 break;
             case "right":
-                newPosition[1] = Math.min(position[1] + 2, 9);
+                newPosition[1] = Math.min(position[1] + 2, 19);
                 break;
         }
         
@@ -125,13 +124,13 @@ public class FastPirateShip extends PirateShip {
                 newPosition[0] = Math.max(position[0] - 2, 0);
                 break;
             case "down":
-                newPosition[0] = Math.min(position[0] + 2, 9);
+                newPosition[0] = Math.min(position[0] + 2, 19);
                 break;
             case "left":
                 newPosition[1] = Math.max(position[1] - 2, 0);
                 break;
             case "right":
-                newPosition[1] = Math.min(position[1] + 2, 9);
+                newPosition[1] = Math.min(position[1] + 2, 19);
                 break;
         }
         return newPosition; // Could still be blocked

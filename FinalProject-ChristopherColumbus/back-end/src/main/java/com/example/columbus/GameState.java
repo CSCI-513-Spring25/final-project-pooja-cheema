@@ -16,8 +16,9 @@ public class GameState {
     private List<SeaMonster> seaMonsters; // List of sea monsters
     private List<int[]> islands; // Positions of all islands
     private String collision; // Information about collision of CC with island/monster/pirate
-    private boolean[][] occupiedPositions; // 10x10 grid to track occupied positions
+    private boolean[][] occupiedPositions; // Grid to track occupied positions
 
+     
     /*
      * GameState constructor to capture current game state
      */
@@ -39,7 +40,7 @@ public class GameState {
         this.islands = islands;
         this.collision = collision;
 
-        this.occupiedPositions = new boolean[10][10]; // Initialize the grid
+        this.occupiedPositions = new boolean[20][20]; // Initialize the grid
         updateOccupiedPositions(); // Update occupied positions initially
 
         // Print info for logging
@@ -86,23 +87,22 @@ public class GameState {
     }
 
 
-
-    // Method to check if a position is occupied
+    // Check if a position is occupied
     public boolean isOccupied(int[] position) {
         return occupiedPositions[position[0]][position[1]];
     }
 
-    // Method to mark a position as occupied
+    // Mark a position as occupied
     public void markPositionOccupied(int[] position) {
         occupiedPositions[position[0]][position[1]] = true;
     }
 
-    // Method to set a position as occupied
+    // Set a position as occupied
     public void setOccupied(int[] position, boolean occupied) {
         occupiedPositions[position[0]][position[1]] = occupied;
     }
 
-    // Method to check if a position is occupied by a fast pirate
+    // Check if a position is occupied by a fast pirate
     public boolean isOccupiedByFastPirate(int[] position) {
         for (PirateShipState pirate : pirates) {
             if (pirate.getType().equals("fast") && pirate.getPosition()[0] == position[0] && pirate.getPosition()[1] == position[1]) {
@@ -112,13 +112,11 @@ public class GameState {
         return false;
     }
 
-
-
     // Method to update occupied positions based on current state
     private void updateOccupiedPositions() {
         // Clear the grid
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
+        for (int i = 0; i <20; i++) {
+            for (int j = 0; j < 20; j++) {
                 occupiedPositions[i][j] = false;
             }
         }
@@ -156,7 +154,10 @@ public class GameState {
         setOccupied(newPosition, true);
         updateOccupiedPositions();
     }
-
+    
+    public void setCollision(String collision) { 
+        this.collision = collision; 
+    }
 
 
     /*

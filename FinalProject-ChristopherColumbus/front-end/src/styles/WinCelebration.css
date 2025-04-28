@@ -17,7 +17,6 @@
     animation: fall 2s linear infinite;
 }
 
-
 .balloon {
     background-image: url('../../public/images/balloon.png');
 }
@@ -26,14 +25,13 @@
     background-image: url('../../public/images/hurray.png');
 }
 
-    
 @keyframes fall {
     0% {
         transform: translateY(-500%);
         opacity: 1;
     }
     100% {
-        transform: translateY(110vh);
+        transform: translateY(500vh);
         opacity: 0;
     }
 }

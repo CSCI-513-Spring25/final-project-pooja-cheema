@@ -4,25 +4,32 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
+    overflow: auto;
 }
 
 .App {
     display: flex;
     flex-direction: row;
     align-items: center;
+    overflow: auto;
+    /* padding-top: 500px;  */
 }
 
 .grid-container {
     display: flex;
     justify-content: center;
     align-items: center;
+    /* padding-top: 500px;  */
 }
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(10, 50px);
-    grid-template-rows: repeat(10, 50px);
-    gap: 1px;
+    /* grid-template-columns: repeat(10, 50px);
+    grid-template-rows: repeat(10, 50px); */
+    grid-template-columns: repeat(20, 1fr);
+    grid-template-rows: repeat(20, 1fr);
+    border: 2px solid #000; 
+    /* gap: 1px; */
 }
 
 .row {
@@ -53,7 +60,7 @@ body {
 }
 
 .cc {
-    width: 48px;
+    width: 45px;
     height: auto;
 }
 
@@ -63,13 +70,13 @@ body {
 }
 
 .monster {
-    width: 36px;
+    width: 40px;
     height: auto;
 }
 
 .island {
-    width: 48px;
-    height: auto;
+    width: 50px;
+    /* height: auto; */
     background: transparent;
 }
 

@@ -8,19 +8,19 @@ const WinCelebration = ({ show, items }) => {
     useEffect(() => {
         if (show) {
 
-            // Select container for celebration balloons
-            const balloonContainer = document.querySelector('.balloon-shower');
+            // Select container for animation items (eg. balloons)
+            const balloonContainer = document.querySelector('.win-celebration');
             balloonContainer.innerHTML = ''; // Clear previous items
 
             // For each item type in items array, create multiple elements
             items.forEach(item => {
-                for (let i = 0; i < 50; i++) {
+                for (let i = 0; i < 100; i++) { // 100 per type for denser effect
                     const element = document.createElement('div');
                     element.className = item.className; // Assign provided class for styling/animation
-                    // Randomize left position and animation delay
+
+                    // Randomize horizontal position and animation delay for more randomness
                     element.style.left = `${Math.random() * 100}%`;
-                    element.style.animationDelay = `${Math.random() * 2}s`;
-                    // Add animated element to container
+                    element.style.animationDelay = `${Math.random() * 10}s`;
                     balloonContainer.appendChild(element);
                 }
             });
@@ -32,8 +32,8 @@ const WinCelebration = ({ show, items }) => {
         return null;
     }
 
-    // Render the container for shower effect
-    return <div className="balloon-shower"></div>;
+    // Render the overlay container for shower effect
+    return <div className="win-celebration"></div>;
 };
 
 export default WinCelebration;

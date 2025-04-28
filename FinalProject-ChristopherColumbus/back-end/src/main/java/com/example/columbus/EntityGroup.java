@@ -23,6 +23,9 @@ public class EntityGroup implements Entity {
 
     @Override
     public void move() {
+        for (Entity entity : entities) { //Loop through all entities
+            entity.move(); 
+        }
     }
 
     @Override

@@ -29,7 +29,7 @@ public class SlowPirateShip extends PirateShip {
         
         // Move down if CC is below
         else if (ccPosition[0] > position[0]) {
-            newPosition[0] = Math.min(position[0] + 1, 9);
+            newPosition[0] = Math.min(position[0] + 1, 19);
 
             // If blocked, alternatively move left/right
             if (Game.getInstance().isOccupied(newPosition) || (newPosition[0] == 0 && newPosition[1] == 0)) {
@@ -61,7 +61,7 @@ public class SlowPirateShip extends PirateShip {
         
         // Move right if CC is to the right
         else if (ccPosition[1] > position[1]) {
-            newPosition[1] = Math.min(position[1] + 1, 9);
+            newPosition[1] = Math.min(position[1] + 1, 19);
 
             // If blocked, alternatively move up/down
             if (Game.getInstance().isOccupied(newPosition) || (newPosition[0] == 0 && newPosition[1] == 0)) {
@@ -101,13 +101,13 @@ public class SlowPirateShip extends PirateShip {
                 newPosition[0] = Math.max(position[0] - 1, 0);
                 break;
             case "down":
-                newPosition[0] = Math.min(position[0] + 1, 9);
+                newPosition[0] = Math.min(position[0] + 1, 19);
                 break;
             case "left":
                 newPosition[1] = Math.max(position[1] - 1, 0);
                 break;
             case "right":
-                newPosition[1] = Math.min(position[1] + 1, 9);
+                newPosition[1] = Math.min(position[1] + 1, 19);
                 break;
         }
 
@@ -123,13 +123,13 @@ public class SlowPirateShip extends PirateShip {
                 newPosition[0] = Math.max(position[0] - 1, 0);
                 break;
             case "down":
-                newPosition[0] = Math.min(position[0] + 1, 9);
+                newPosition[0] = Math.min(position[0] + 1, 19);
                 break;
             case "left":
                 newPosition[1] = Math.max(position[1] - 1, 0);
                 break;
             case "right":
-                newPosition[1] = Math.min(position[1] + 1, 9);
+                newPosition[1] = Math.min(position[1] + 1, 19);
                 break;
         }
         return newPosition;

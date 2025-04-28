@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import IconManual from './IconManual';
 import axios from 'axios';
 import '../styles/Controls.css';
 
@@ -82,6 +83,7 @@ const Controls = ({ onMove, showTempMessage, modalVisible }) => {
             <button className="right-button" onClick={() => move('right')}>Right</button>
             <button className="up-button" onClick={() => move('up')}>Up</button>
             <button className="down-button" onClick={() => move('down')}>Down</button>
+            <IconManual />
         </div>
     );
 

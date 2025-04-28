@@ -22,7 +22,6 @@ public class PirateShipFactory {
             return new PatrolPirateShip(); // Return slow pirate ship
         }
         
-
         return null; // Return null if type is not recognized
     }
 }

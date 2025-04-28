@@ -4,100 +4,52 @@ import java.util.Random;
 import com.example.columbus.GameState.PirateShipState;
 
 /**
- * This class represents a sea monster in the game
+ * This class represents a sea monster in the game.
  */
 public class SeaMonster implements Entity {
 
     private int[] position; // Current sea monster position (x,y)
-    private int[] initialPosition;
+    private int[] initialPosition; // Original spawn position
 
     /*
      * Construct a sea monster at random position on grid
      */
     public SeaMonster() {
         Random random = new Random();
-        this.position = new int[] { random.nextInt(10), random.nextInt(10) };
+        this.position = new int[] { random.nextInt(20), random.nextInt(20) };
         this.initialPosition = position.clone(); // Store the initial position
     }
 
     @Override
     public void move() {
-
-
         moveMonster();
-
-
-        System.out.println("Sea monster is inside overridden move method ");
     }
 
-    // private void moveMonster() {
-    //     System.out.println("Sea monster is inside private move method ");
-    //     Random random = new Random();
-    //     int[] ccPosition = Game.getInstance().getState().getCcPosition();
-    //     int[] newPosition = position.clone();
-
-    //     // Generate random movement within 3 cells range
-    //     int maxAttempts = 10; // Limit the number of attempts to find a valid position
-    //     for (int i = 0; i < maxAttempts; i++) {
-    //         int deltaX = random.nextInt(7) - 3; // Range from -3 to 3
-    //         int deltaY = random.nextInt(7) - 3; // Range from -3 to 3
-    //         newPosition[0] = Math.max(0, Math.min(9, position[0] + deltaX));
-    //         newPosition[1] = Math.max(0, Math.min(9, position[1] + deltaY));
-
-    //         // Check if the new position is valid
-    //         if (!Game.getInstance().isOccupied(newPosition)) {
-    //             boolean isOccupiedByPirate = false;
-    //             for (PirateShipState pirate : Game.getInstance().getState().getPirates()) {
-    //                 if (pirate.getPosition()[0] == newPosition[0] && pirate.getPosition()[1] == newPosition[1]) {
-    //                     isOccupiedByPirate = true;
-    //                     break;
-    //                 }
-    //             }
-    //             // Ensure the new position is not occupied by the CC or another sea monster
-    //             boolean isOccupiedBySeaMonster = false;
-    //             for (SeaMonster seaMonster : Game.getInstance().getState().getSeaMonsters()) {
-    //                 if (seaMonster.getPosition()[0] == newPosition[0] && seaMonster.getPosition()[1] == newPosition[1]) {
-    //                     isOccupiedBySeaMonster = true;
-    //                     break;
-    //                 }
-    //             }
-    //             // Ensure the new position is not occupied by the CC
-    //             if (!isOccupiedByPirate && !isOccupiedBySeaMonster && !(newPosition[0] == ccPosition[0] && newPosition[1] == ccPosition[1])) {
-    //                 Game.getInstance().getState().updateSeaMonsterPosition(position, newPosition); // Update the position in GameState
-    //                 position[0] = newPosition[0];
-    //                 position[1] = newPosition[1];
-    //                 break;
-    //             }
-    //         }
-    //     }
-
-    //     System.out.println("Sea monster moving to " + position[0] + "," + position[1]);
-    //     System.out.println("---------------- ");
-    // }
-
-
+    /*
+     * Move monster to random adjacent cell
+     */
     private void moveMonster() {
-        System.out.println("Sea monster is inside private move method ");
         Random random = new Random();
         int[] ccPosition = Game.getInstance().getState().getCcPosition();
         int[] newPosition = position.clone();
 
-        // Generate random movement within 1 cell range from initial position
+        // Generate random movement within 1 cell range from initial position, possible moves
         int[][] possibleMoves = {
-            {0, 0}, {0, -1}, {0, 1}, {-1, 0}, {1, 0}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}
+                { 0, 0 }, { 0, -1 }, { 0, 1 }, { -1, 0 }, { 1, 0 }, { -1, -1 }, { -1, 1 }, { 1, -1 }, { 1, 1 }
         };
 
-        int maxAttempts = 10; // Limit the number of attempts to find a valid position
+        int maxAttempts = 20; // Limit the number of attempts to find a valid position (to prevent infinite trying)
         for (int i = 0; i < maxAttempts; i++) {
             int[] move = possibleMoves[random.nextInt(possibleMoves.length)];
             newPosition[0] = initialPosition[0] + move[0];
             newPosition[1] = initialPosition[1] + move[1];
 
             // Ensure the new position is within bounds
-            if (newPosition[0] >= 0 && newPosition[0] < 10 && newPosition[1] >= 0 && newPosition[1] < 10) {
-                // Check if the new position is valid
+            if (newPosition[0] >= 0 && newPosition[0] < 20 && newPosition[1] >= 0 && newPosition[1] < 20) {
+                
+                // Check if the new position is valid, not occupied by island
                 if (!Game.getInstance().isOccupied(newPosition)) {
-                    boolean isOccupiedByPirate = false;
+                    boolean isOccupiedByPirate = false; // Do not move onto pirate
                     for (PirateShipState pirate : Game.getInstance().getState().getPirates()) {
                         if (pirate.getPosition()[0] == newPosition[0] && pirate.getPosition()[1] == newPosition[1]) {
                             isOccupiedByPirate = true;
@@ -107,14 +59,20 @@ public class SeaMonster implements Entity {
                     // Ensure the new position is not occupied by another sea monster
                     boolean isOccupiedBySeaMonster = false;
                     for (SeaMonster seaMonster : Game.getInstance().getState().getSeaMonsters()) {
-                        if (seaMonster.getPosition()[0] == newPosition[0] && seaMonster.getPosition()[1] == newPosition[1]) {
+                        if (seaMonster.getPosition()[0] == newPosition[0]
+                                && seaMonster.getPosition()[1] == newPosition[1]) {
                             isOccupiedBySeaMonster = true;
                             break;
                         }
                     }
                     // Ensure the new position is not occupied by the CC
-                    if (!isOccupiedByPirate && !isOccupiedBySeaMonster && !(newPosition[0] == ccPosition[0] && newPosition[1] == ccPosition[1])) {
-                        Game.getInstance().getState().updateSeaMonsterPosition(position, newPosition); // Update the position in GameState
+                    if (!isOccupiedByPirate && !isOccupiedBySeaMonster
+                            && !(newPosition[0] == ccPosition[0] && newPosition[1] == ccPosition[1])) {
+
+                        // Update GameState's occupied matrix       
+                        Game.getInstance().getState().updateSeaMonsterPosition(position, newPosition);
+
+                        // Move monster
                         position[0] = newPosition[0];
                         position[1] = newPosition[1];
                         break;
@@ -122,11 +80,7 @@ public class SeaMonster implements Entity {
                 }
             }
         }
-
-        System.out.println("Sea monster moving to " + position[0] + "," + position[1]);
-        System.out.println("---------------- ");
     }
-
 
     /*
      * Get current position of monster
@@ -143,12 +97,4 @@ public class SeaMonster implements Entity {
     public void setPosition(int[] position) {
         this.position = position;
     }
-
-    // @Override
-    // public void update(int[] ccPosition) {
-    //     // Respond to CC's position changes
-    //     // moveMonster();
-    //     // System.out.println("SeaMonster notified of CC's position: " + ccPosition[0] + "," + ccPosition[1]);
-    // }
-    
 }

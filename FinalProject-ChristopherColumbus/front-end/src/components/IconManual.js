@@ -1,6 +1,9 @@
 import React from 'react';
 import '../styles/IconManual.css';
 
+/**
+ * Icon Manual to explain each icon on the grid
+ */
 const IconManual = () => {
     return (
         <div className="icon-manual">

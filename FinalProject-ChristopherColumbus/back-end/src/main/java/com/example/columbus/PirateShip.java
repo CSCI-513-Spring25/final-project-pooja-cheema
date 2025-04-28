@@ -1,7 +1,6 @@
 package com.example.columbus;
 
 import java.util.Random;
-// import java.util.Observer;
 
 /**
  * Abstract class representing a pirate ship.
@@ -18,7 +17,7 @@ public abstract class PirateShip implements Observer, Entity {
      */
     public PirateShip() {
         Random random = new Random();
-        this.position = new int[] { random.nextInt(10), random.nextInt(10) };
+        this.position = new int[] { random.nextInt(20), random.nextInt(20) };
     }
 
     /*
@@ -49,15 +48,7 @@ public abstract class PirateShip implements Observer, Entity {
      */
     public void move() {
         strategy.move(this);
-    }
-
-
-    // public void performMove() {
-    //     if (strategy != null) {
-    //         strategy.move(this);
-    //     }
-    // }
-    
+    }    
 
     /*
      * This method is called when CC position is updated.

@@ -8,16 +8,19 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './styles/styles.css';
 
+// Main app component for game
 const App = () => {
-    const [notification, setNotification] = useState('');
-    const [gameState, setGameState] = useState(null);
-    const [gameStarted, setGameStarted] = useState(false);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [collisionType, setCollisionType] = useState('');
+    const [notification, setNotification] = useState(''); // Message shown in modal dialogs
+    const [gameState, setGameState] = useState(null); // Holds latest state from backend API
+    const [gameStarted, setGameStarted] = useState(false); // Tracks if game is in progress
+    const [modalVisible, setModalVisible] = useState(false); // Controls modal dialog visibility
+    const [collisionType, setCollisionType] = useState(''); // Stores collision happens with whom (pirate, monster)
     const navigate = useNavigate();
-    const [showBalloonShower, setShowBalloonShower] = useState(false);
-    const [tempMessage, setTempMessage] = useState('');
+    const [showBalloonShower, setShowBalloonShower] = useState(false); // Show balloons on win
+    const [tempMessage, setTempMessage] = useState(''); // Temporary toast message
 
+
+    // Poll game state from back end every second when game is running
     useEffect(() => {
         if (gameStarted) {
             const intervalId = setInterval(() => {
@@ -26,12 +29,14 @@ const App = () => {
                     .catch(error => console.error("Polling error:", error));
             }, 1000); // Poll every second
 
+            // Stop polling when game stops
             return () => clearInterval(intervalId);
         }
     }, [gameStarted]);
 
 
 
+    // Pause/resume monster movement on server, depending on modal (visible / not visible)
     useEffect(() => {
 
         // Only pause/resume if game has started
@@ -39,16 +44,18 @@ const App = () => {
 
         if (modalVisible) {
             axios.post('http://localhost:8080/api/pause');
-        } else {
+        } 
+        else {
             axios.post('http://localhost:8080/api/resume');
         }
     }, [modalVisible, gameStarted]);
-    
 
+
+    // Handle result of player movement (called by controls component)
     const handleMove = (updatedState) => {
         console.log('Updated state:', updatedState);
 
-        // Check if ccPosition matches any pirate position
+        // Check if ccPosition matches any pirate position (for collision)
         const ccPosition = updatedState.ccPosition;
         const pirates = updatedState.pirates;
         let collisionDetected = false;
@@ -60,11 +67,15 @@ const App = () => {
             }
         }
 
+        // If collision happens, show hijack notification
         if (collisionDetected) {
             setCollisionType("pirate");
             setNotification("Hijacked! Your voyage ends in pirate chains.. Begin again!");
             setModalVisible(true);
-        } else if (updatedState.collision) {
+        } 
+        
+        // Handle collision responses sent by back end (treasure, monster, island)
+        else if (updatedState.collision) {
             setCollisionType(updatedState.collision);
             switch (updatedState.collision) {
                 case "treasure":
@@ -78,33 +89,34 @@ const App = () => {
                     setNotification("Hijacked! Your voyage ends in pirate chains.. Begin again!");
                     break;
                 case "island":
-                    // setNotification("Island ahead! Change your way.");
-                    if (setTempMessage) {
+                    if (setTempMessage) { // Show a short toast message for island collision, not a modal
                         setTempMessage("Island ahead! Change your way.");
                         setTimeout(() => setTempMessage(''), 1500);
                     }
-                    return;
-                // break;
+                    return; // Do not open modal for island collision
                 default:
                     setNotification("");
             }
             setModalVisible(true);
         }
 
-        setGameState(updatedState);
+        setGameState(updatedState); // Update UI with new game state
     };
 
 
+
+    // Start or restart the game, and reset state
     const handleStart = () => {
         setGameStarted(true);
         setGameState(null);
         axios.post('http://localhost:8080/api/start');
     };
 
+    // Handle closing the modal - reset game position based on collision type
     const closeModal = () => {
         setModalVisible(false);
         if (collisionType === "pirate") {
-            setGameStarted(false);
+            setGameStarted(false); // End game on pirate collision
         }
         else if (collisionType === "monster") {
             setGameState(prevState => ({
@@ -118,15 +130,18 @@ const App = () => {
         }
     };
 
+    // Go back button handler - goes to welcome page
     const handleGoBack = () => {
         setGameStarted(false);
     };
 
+    // Render game UI
     return (
         <div className="App">
 
             {tempMessage && (
                 <div className="toast-message">
+                    <img src="/images/island.jpg" alt="Island" style={{ width: 40, height: 40, marginRight: 4 }} />
                     {tempMessage}
                 </div>
             )}
@@ -147,7 +162,7 @@ const App = () => {
                             onClick={handleGoBack}>
                             ⬅ Go Back
                         </button>
-
+                        
                         <Controls onMove={handleMove} modalVisible={modalVisible} showTempMessage={setTempMessage} />
 
                         <GameGrid gameState={gameState} />
