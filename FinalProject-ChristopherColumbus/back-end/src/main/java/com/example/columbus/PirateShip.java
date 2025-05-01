@@ -4,13 +4,14 @@ import java.util.Random;
 
 /**
  * Abstract class representing a pirate ship.
- * It implements Observer and Entity interfaces to allow it to be 
+ * It implements Observer and Entity interfaces to allow it to be
  * notified of CC's position
  */
 public abstract class PirateShip implements Observer, Entity {
 
     protected int[] position; // Current pirate ship position
     protected MovementStrategy strategy; // Current movement strategy for pirate ship
+    private int ignoreTurns = 0;
 
     /*
      * Constructor to initialize pirate ship at a random position within the grid
@@ -48,14 +49,14 @@ public abstract class PirateShip implements Observer, Entity {
      */
     public MovementStrategy getStrategy() {
         return strategy;
-    } 
+    }
 
     /*
      * Move pirate ship according to current movement strategy
      */
     public void move() {
         strategy.move(this);
-    }    
+    }
 
     /*
      * This method is called when CC position is updated.
@@ -63,6 +64,22 @@ public abstract class PirateShip implements Observer, Entity {
     @Override
     public void update(int[] ccPosition) {
         move();
+    }
+
+    @Override
+    public void activateIgnoreMode(int turns) {
+        this.ignoreTurns = turns;
+    }
+
+    @Override
+    public boolean isIgnoringColumbus() {
+        return ignoreTurns > 0;
+    }
+
+    @Override
+    public void decrementIgnoreTurns() {
+        if (ignoreTurns > 0)
+            ignoreTurns--;
     }
 
     /*

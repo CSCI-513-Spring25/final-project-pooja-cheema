@@ -10,6 +10,8 @@ import java.util.List;
 public class EntityGroup implements Entity {
 
     private List<Entity> entities = new ArrayList<>(); // List to hold all entities in a group
+    private int ignoreTurns = 0; // Number of turns to ignore Columbus
+
 
     // This method adds an entity to the group
     public void addEntity(Entity entity) {
@@ -21,10 +23,35 @@ public class EntityGroup implements Entity {
         return entities;
     }
 
+    // public void activateIgnoreMode(int turns) {
+    //     this.ignoreTurns = turns;
+    // }
+
+    public boolean isIgnoring() {
+        return ignoreTurns > 0;
+    }
+
     @Override
     public void move() {
-        for (Entity entity : entities) { //Loop through all entities
-            entity.move(); 
+        if (ignoreTurns > 0) {
+            ignoreTurns--; // Decrement the ignore turn count
+            return; // Skip all entity movement this turn (or only skip collision logic, your choice)
+        }
+
+        for (Entity entity : entities) {
+            entity.move();
+        }
+    }
+
+    public void activateIgnoreMode(int turns) {
+        for (Entity entity : entities) {
+            entity.activateIgnoreMode(turns);
+        }
+    }
+    
+    public void decrementIgnoreTurns() {
+        for (Entity entity : entities) {
+            entity.decrementIgnoreTurns();
         }
     }
 

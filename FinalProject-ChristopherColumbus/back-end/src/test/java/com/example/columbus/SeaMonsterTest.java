@@ -10,13 +10,13 @@ import static org.mockito.Mockito.*;
 public class SeaMonsterTest {
 
     private SeaMonster seaMonster;
-    private Game mockGame;
+    private Game2 mockGame;
     private GameState mockGameState;
 
     @BeforeEach
     public void setUp() throws Exception {
         // Mock the Game and GameState classes
-        mockGame = mock(Game.class);
+        mockGame = mock(Game2.class);
         mockGameState = mock(GameState.class);
 
         // Use reflection to set the Game singleton instance
@@ -73,9 +73,9 @@ public class SeaMonsterTest {
         assertArrayEquals(new int[]{8, 8}, seaMonster.getPosition());
     }
 
-    private void setGameInstance(Game mockInstance) throws Exception {
+    private void setGameInstance(Game2 mockInstance) throws Exception {
         // Use reflection to set the private static instance of Game
-        java.lang.reflect.Field instanceField = Game.class.getDeclaredField("instance");
+        java.lang.reflect.Field instanceField = Game2.class.getDeclaredField("instance");
         instanceField.setAccessible(true);
         instanceField.set(null, mockInstance);
     }

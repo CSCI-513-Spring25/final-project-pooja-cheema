@@ -11,16 +11,16 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    height: 90vh;
     margin-right: 30px;
 }
 
 .left-button {
-    width: 100px;
+    width: 70px;
     /* bottom: 500px; */
-    height: 50px;
+    height: 30px;
     /* margin: 10px; */
-    font-size: 18px;
+    font-size: 15px;
     cursor: pointer;
     background: linear-gradient(135deg, #6a11cb, #2575fc);
     color: white;
@@ -30,6 +30,7 @@
     transition: transform 0.2s, box-shadow 0.2s;
     font-family: 'Comic Sans MS', cursive, sans-serif;
     padding: 10px 20px;
+    padding-top: 0.2ch;
 }
 
 .left-button:hover {
@@ -39,10 +40,10 @@
 }
 
 .right-button {
-    width: 100px;
-    height: 50px;
+    width: 70px;
+    height: 30px;
     margin: 10px;
-    font-size: 18px;
+    font-size: 15px;
     cursor: pointer;
     background: linear-gradient(135deg, #ff512f, #dd2476);
     color: white;
@@ -52,6 +53,7 @@
     transition: transform 0.2s, box-shadow 0.2s;
     font-family: 'Comic Sans MS', cursive, sans-serif;
     padding: 10px 20px;
+    padding-top: 0.2ch;
 }
 
 .right-button:hover {
@@ -61,10 +63,10 @@
 }
 
 .up-button {
-    width: 100px;
-    height: 50px;
+    width: 70px;
+    height: 30px;
     /* margin: 10px; */
-    font-size: 18px;
+    font-size: 15px;
     cursor: pointer;
     background: linear-gradient(135deg, #00c6ff, #0072ff);
     color: white;
@@ -74,6 +76,7 @@
     transition: transform 0.2s, box-shadow 0.2s;
     font-family: 'Comic Sans MS', cursive, sans-serif;
     padding: 10px 20px;
+    padding-top: 0.2ch;
 }
 
 .up-button:hover {
@@ -84,10 +87,10 @@
 
 
 .down-button {
-    width: 100px;
-    height: 50px;
+    width: 70px;
+    height: 30px;
     margin: 10px;
-    font-size: 18px;
+    font-size: 15px;
     cursor: pointer;
     background: linear-gradient(135deg, #f7971e, #ffd200);
     color: white;
@@ -97,6 +100,7 @@
     transition: transform 0.2s, box-shadow 0.2s;
     font-family: 'Comic Sans MS', cursive, sans-serif;
     padding: 10px 20px;
+    padding-top: 0.2ch;
 }
 
 .down-button:hover {
@@ -107,13 +111,13 @@
 
 .reset-button {
     position: absolute;
-    width: 140px;
+    width: 130px;
     /* bottom: 500px; */
-    height: 50px;
+    height: 30px;
     /* margin: 50px; */
     margin-left: 360px;
-    margin-bottom: 710px;
-    font-size: 18px;
+    margin-bottom: 650px;
+    font-size: 15px;
     cursor: pointer;
     background: linear-gradient(135deg, #6a11cb, #2575fc);
     color: white;
@@ -123,6 +127,7 @@
     transition: transform 0.2s, box-shadow 0.2s;
     font-family: 'Comic Sans MS', cursive, sans-serif;
     padding: 10px 20px;
+    padding-top: 0.2ch;
 }
 
 .reset-button:hover {
@@ -133,14 +138,14 @@
 
 .toggle-strategy-button {
     position: absolute;
-    width: 370px;
+    width: 315px;
     /* bottom: 500px; */
-    height: 50px;
-    margin-top: -64px;
+    height: 30px;
+    margin-top: -55px;
     /* margin: 50px; */
     margin-left: 360px;
     /* margin-bottom: 900px; */
-    font-size: 18px;
+    font-size: 15px;
     cursor: pointer;
     background: linear-gradient(135deg, #6a11cb, #2575fc);
     color: white;
@@ -150,6 +155,7 @@
     transition: transform 0.2s, box-shadow 0.2s;
     font-family: 'Comic Sans MS', cursive, sans-serif;
     padding: 10px 20px;
+    padding-top: 0.3ch;
 }
 
 .toggle-strategy-button:hover {

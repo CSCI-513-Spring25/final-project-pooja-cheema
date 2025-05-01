@@ -58,7 +58,7 @@ public class ColumbusGameServer extends NanoHTTPD {
             String direction = params.get("direction");
             GameState result = game.move(direction); // Move player and get new state
             response = newFixedLengthResponse(Response.Status.OK, "application/json", result.toJson());
-        }    
+        }
 
         else if (uri.equals("/api/state") && method == Method.GET) {
             GameState state = game.getState();
@@ -67,14 +67,16 @@ public class ColumbusGameServer extends NanoHTTPD {
 
         // Handle POST /api/pause: pause monster movement
         else if (uri.equals("/api/pause") && method == Method.POST) {
-            game.stopMonsterMovement();
+            // game.stopMonsterMovement();
+            game.getMovementController().stopAll();
             response = newFixedLengthResponse(Response.Status.OK, "application/json",
                     "{\"status\":\"Monster movement paused\"}");
         }
 
         // Handle POST /api/resume: resume monster movement
         else if (uri.equals("/api/resume") && method == Method.POST) {
-            game.startMonsterMovement();
+            // game.startMonsterMovement();
+            game.getMovementController().startAll();
             response = newFixedLengthResponse(Response.Status.OK, "application/json",
                     "{\"status\":\"Monster movement resumed\"}");
         }

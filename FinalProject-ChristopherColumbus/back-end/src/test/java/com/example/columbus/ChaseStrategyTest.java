@@ -10,7 +10,7 @@ public class ChaseStrategyTest {
 
     private ChaseStrategy chaseStrategy;
     private PirateShip mockPirateShip;
-    private Game mockGame;
+    private Game2 mockGame;
     private GameState mockGameState;
 
     @BeforeEach
@@ -20,7 +20,7 @@ public class ChaseStrategyTest {
 
         // Mock the PirateShip, Game, and GameState classes
         mockPirateShip = mock(PirateShip.class);
-        mockGame = mock(Game.class);
+        mockGame = mock(Game2.class);
         mockGameState = mock(GameState.class);
 
         // Use reflection to set the Game singleton instance
@@ -88,9 +88,9 @@ public class ChaseStrategyTest {
         assertArrayEquals(new int[]{0, 18}, piratePosition, "Pirate ship should stay within bounds");
     }
 
-    private void setGameInstance(Game mockInstance) throws Exception {
+    private void setGameInstance(Game2 mockInstance) throws Exception {
         // Use reflection to set the private static instance of Game
-        java.lang.reflect.Field instanceField = Game.class.getDeclaredField("instance");
+        java.lang.reflect.Field instanceField = Game2.class.getDeclaredField("instance");
         instanceField.setAccessible(true);
         instanceField.set(null, mockInstance);
     }

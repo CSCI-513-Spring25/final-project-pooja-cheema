@@ -7,4 +7,13 @@ public interface Entity {
     public int[] getPosition(); // Method to get current position of entity
 
     public void setPosition(int[] position); // Method to set new position of entity
+
+    public void activateIgnoreMode(int turns); // Method to activate ignore mode by pirates for CC
+
+    default boolean isIgnoringColumbus() {
+        return false;
+    }
+
+    public void decrementIgnoreTurns();
+
 }

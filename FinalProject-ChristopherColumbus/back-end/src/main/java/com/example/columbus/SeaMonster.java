@@ -10,6 +10,7 @@ public class SeaMonster implements Entity {
 
     private int[] position; // Current sea monster position (x,y)
     private int[] initialPosition; // Original spawn position
+    private int ignoreTurns = 0;
 
     /*
      * Construct a sea monster at random position on grid
@@ -34,7 +35,8 @@ public class SeaMonster implements Entity {
         int[] ccPosition = Game.getInstance().getState().getCcPosition();
         int[] newPosition = position.clone();
 
-        // Generate random movement within 1 cell range from initial position, possible moves
+        // Generate random movement within 1 cell range from initial position, possible
+        // moves
         int[][] possibleMoves = {
                 { 0, 0 }, { 0, -1 }, { 0, 1 }, { -1, 0 }, { 1, 0 }, { -1, -1 }, { -1, 1 }, { 1, -1 }, { 1, 1 }
         };
@@ -50,7 +52,10 @@ public class SeaMonster implements Entity {
             if (newPosition[0] >= 0 && newPosition[0] < 20 && newPosition[1] >= 0 && newPosition[1] < 20) {
 
                 // Check if the new position is valid, not occupied by island
-                if (!Game.getInstance().isOccupied(newPosition)) {
+                if (!Game.getInstance().getGameStateManager().isOccupied(newPosition)) {
+
+                // if (!Game.getInstance().isOccupied(newPosition)) {
+                
                     boolean isOccupiedByPirate = false; // Do not move onto pirate
                     for (PirateShipState pirate : Game.getInstance().getState().getPirates()) {
                         if (pirate.getPosition()[0] == newPosition[0] && pirate.getPosition()[1] == newPosition[1]) {
@@ -100,6 +105,22 @@ public class SeaMonster implements Entity {
     public void setPosition(int[] position) {
         this.position = position;
         this.initialPosition = position.clone(); // So monster moves within 3x3 from actual spawn
+    }
+
+    @Override
+    public void activateIgnoreMode(int turns) {
+        this.ignoreTurns = turns;
+    }
+
+    @Override
+    public boolean isIgnoringColumbus() {
+        return ignoreTurns > 0;
+    }
+
+    @Override
+    public void decrementIgnoreTurns() {
+        if (ignoreTurns > 0)
+            ignoreTurns--;
     }
 
 }

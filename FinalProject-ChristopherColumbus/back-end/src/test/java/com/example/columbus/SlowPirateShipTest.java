@@ -13,13 +13,13 @@ import java.lang.reflect.Field;
 public class SlowPirateShipTest {
 
     private SlowChaseStrategy slowPirateShip;
-    private Game mockGame;
+    private Game2 mockGame;
     private GameState mockGameState;
 
     @BeforeEach
     public void setUp() throws Exception {
         // Mock the Game and GameState classes
-        mockGame = mock(Game.class);
+        mockGame = mock(Game2.class);
         mockGameState = mock(GameState.class);
 
         setGameInstance(mockGame);
@@ -102,8 +102,8 @@ public class SlowPirateShipTest {
         assertEquals("slow", slowPirateShip.getType());
     }
 
-    private void setGameInstance(Game mockInstance) throws Exception {
-    Field instanceField = Game.class.getDeclaredField("instance");
+    private void setGameInstance(Game2 mockInstance) throws Exception {
+    Field instanceField = Game2.class.getDeclaredField("instance");
     instanceField.setAccessible(true);
     instanceField.set(null, mockInstance);
 }

@@ -18,7 +18,9 @@ public class SlowChaseStrategy implements MovementStrategy {
             newPosition[0] = Math.max(position[0] - 1, 0);
 
             // If blocked, alternatively move left/right
-            if (Game.getInstance().isOccupied(newPosition) || (newPosition[0] == 0 && newPosition[1] == 0)) {
+            if (Game.getInstance().getGameStateManager().isOccupied(newPosition) || 
+            (newPosition[0] == 0 && newPosition[1] == 0)) {
+            // if (Game.getInstance().isOccupied(newPosition) || (newPosition[0] == 0 && newPosition[1] == 0)) {
                 if (ccPosition[1] < position[1]) { // CC is to the left
                     newPosition = tryMove(position, "left", "right");
                 } else { // CC is to the right
@@ -35,7 +37,9 @@ public class SlowChaseStrategy implements MovementStrategy {
             newPosition[0] = Math.min(position[0] + 1, 19);
 
             // If blocked, alternatively move left/right
-            if (Game.getInstance().isOccupied(newPosition) || (newPosition[0] == 0 && newPosition[1] == 0)) {
+            if (Game.getInstance().getGameStateManager().isOccupied(newPosition) || 
+            (newPosition[0] == 0 && newPosition[1] == 0)) {
+            // if (Game.getInstance().isOccupied(newPosition) || (newPosition[0] == 0 && newPosition[1] == 0)) {
                 if (ccPosition[1] < position[1]) { // CC is to the left
                     newPosition = tryMove(position, "left", "right");
                 } else { // CC is to the right
@@ -52,7 +56,9 @@ public class SlowChaseStrategy implements MovementStrategy {
             newPosition[1] = Math.max(position[1] - 1, 0);
 
             // If blocked, alternatively move up/down
-            if (Game.getInstance().isOccupied(newPosition) || (newPosition[0] == 0 && newPosition[1] == 0)) {
+            if (Game.getInstance().getGameStateManager().isOccupied(newPosition) || 
+            (newPosition[0] == 0 && newPosition[1] == 0)) {
+            // if (Game.getInstance().isOccupied(newPosition) || (newPosition[0] == 0 && newPosition[1] == 0)) {
                 if (ccPosition[0] < position[0]) { // CC is above
                     newPosition = tryMove(position, "up", "down");
                 } else { // CC is below
@@ -69,7 +75,9 @@ public class SlowChaseStrategy implements MovementStrategy {
             newPosition[1] = Math.min(position[1] + 1, 19);
 
             // If blocked, alternatively move up/down
-            if (Game.getInstance().isOccupied(newPosition) || (newPosition[0] == 0 && newPosition[1] == 0)) {
+            if (Game.getInstance().getGameStateManager().isOccupied(newPosition) || 
+            (newPosition[0] == 0 && newPosition[1] == 0)) {
+            // if (Game.getInstance().isOccupied(newPosition) || (newPosition[0] == 0 && newPosition[1] == 0)) {
                 if (ccPosition[0] < position[0]) { // CC is above
                     newPosition = tryMove(position, "up", "down");
                 } else { // CC is below
@@ -107,7 +115,7 @@ public class SlowChaseStrategy implements MovementStrategy {
         }
 
         // If primary direction is not blocked, move ahead
-        if (!Game.getInstance().isOccupied(newPosition)) {
+        if (!Game.getInstance().getGameStateManager().isOccupied(newPosition)) {
             return newPosition;
         }
 

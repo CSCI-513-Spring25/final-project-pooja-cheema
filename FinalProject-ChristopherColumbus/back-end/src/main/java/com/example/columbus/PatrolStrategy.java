@@ -132,7 +132,8 @@ public class PatrolStrategy implements MovementStrategy {
         int[] cc = game.getState().getCcPosition();
         int[] patrolPos = patrol.getPosition();
         if (patrolPos[0] == cc[0] && patrolPos[1] == cc[1]) {
-            game.hijackByPirate();
+            // game.hijackByPirate();
+            game.getGameStateManager().hijackByPirate();
             return;
         }
     }
