@@ -58,26 +58,7 @@ public class ColumbusGameServer extends NanoHTTPD {
             String direction = params.get("direction");
             GameState result = game.move(direction); // Move player and get new state
             response = newFixedLengthResponse(Response.Status.OK, "application/json", result.toJson());
-        }
-
-        // Handle GET /api/state: get current state of game
-        // else if (uri.equals("/api/state") && method == Method.GET) {
-        // GameState state = game.getState();
-        // response = newFixedLengthResponse(Response.Status.OK, "application/json",
-        // state.toJson());
-        // }
-
-        // Handle GET /api/state: get current state of game
-        // else if (uri.equals("/api/state") && method == Method.GET) {
-        // GameState state = game.getState();
-        // String collision = game.getCollisionStatus();
-        // if (collision != null) {
-        // state.setCollision(collision); // GameState must have setCollision(String)
-        // game.setCollisionStatus(null); // Only send collision ONCE
-        // }
-        // response = newFixedLengthResponse(Response.Status.OK, "application/json",
-        // state.toJson());
-        // }
+        }    
 
         else if (uri.equals("/api/state") && method == Method.GET) {
             GameState state = game.getState();
@@ -102,6 +83,19 @@ public class ColumbusGameServer extends NanoHTTPD {
         else if (uri.equals("/api/clear-collision") && method == Method.POST) {
             game.setCollisionStatus(null);
             response = newFixedLengthResponse(Response.Status.OK, "application/json", "{\"status\":\"cleared\"}");
+        }
+
+        else if (uri.equals("/api/toggleStrategy") && method == Method.POST) {
+            game.togglePirateStrategies(); // or Game.getInstance().togglePirateStrategies();
+            response = newFixedLengthResponse(Response.Status.OK, "application/json",
+                    "{\"status\":\"Strategies toggled\"}");
+        }
+
+        // Handle GET /api/currentStrategy: return current strategy type
+        else if (uri.equals("/api/currentStrategy") && method == Method.GET) {
+            String strategy = game.getCurrentStrategy();
+            response = newFixedLengthResponse(Response.Status.OK, "application/json",
+                    "{\"strategy\":\"" + strategy + "\"}");
         }
 
         // Handle any other routes: return 404

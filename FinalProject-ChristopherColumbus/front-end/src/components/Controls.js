@@ -6,7 +6,7 @@ import '../styles/Controls.css';
 /**
  * Controls component handles CC movement, supports button clicks and key press for navigation
  */
-const Controls = ({ onMove, showTempMessage, modalVisible }) => {
+const Controls = ({ onMove, showTempMessage, modalVisible, currentStrategy, setCurrentStrategy }) => {
 
     /**
      * Sends move command to backend server.
@@ -33,8 +33,6 @@ const Controls = ({ onMove, showTempMessage, modalVisible }) => {
                     showTempMessage("Oops! Island! Change your way.");
                     setTimeout(() => showTempMessage(''), 1500); // Message disappears after 1.5 seconds
                 }
-
-
             }
         } catch (error) {
             console.error("Error moving:", error);
@@ -83,18 +81,21 @@ const Controls = ({ onMove, showTempMessage, modalVisible }) => {
      */
     const handleReset = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/api/reset');
-            if (response.status === 200 && onMove) {
-                // Optionally re-fetch the game state
-                const newState = await axios.get('http://localhost:8080/api/state');
-                onMove(newState.data);
+            const resetResponse = await axios.post('http://localhost:8080/api/reset');
+            if (resetResponse.status === 200 && onMove) {
+                // Fetch updated game state and current strategy together
+                const [stateRes, strategyRes] = await Promise.all([
+                    axios.get('http://localhost:8080/api/state'),
+                    axios.get('http://localhost:8080/api/currentStrategy')
+                ]);
+    
+                onMove(stateRes.data); // Update board state
+                setCurrentStrategy(strategyRes.data.strategy); // Update label in UI
             }
         } catch (error) {
             console.error("Error resetting game:", error);
         }
-    };
-
-    
+    }; 
 
     return (
         <div className="controls">
@@ -103,7 +104,9 @@ const Controls = ({ onMove, showTempMessage, modalVisible }) => {
             <button className="up-button" onClick={() => move('up')}>Up</button>
             <button className="down-button" onClick={() => move('down')}>Down</button>
             <button className="reset-button" onClick={handleReset}>Reset Game</button>
-            <IconManual />
+            {/* <IconManual /> */}
+            <IconManual strategy={currentStrategy} />
+            
         </div>
     );
 

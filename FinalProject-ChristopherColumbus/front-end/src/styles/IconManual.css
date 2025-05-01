@@ -4,7 +4,7 @@
     /* margin-left: 15px; */
     /* left: 100px; */
     width: 150px;
-    /* height: 350px; */
+    height: 380px;
     border: 3px solid #cccccc;
     padding: 10px;
     background-color: #b2ecee;
@@ -14,18 +14,21 @@
 }
 
 .icon-manual h2 {
-    font-size: 1.2em;
+    font-size: 1em;
     font-family: 'Comic Sans MS', cursive, sans-serif;
     margin-bottom: 10px;
+    margin-top: -0.7px;
 }
 
 .icon-manual ul {
     list-style-type: none;
+    /* font-size: 1em; */
     padding: 0;
 }
 
 .icon-manual li {
     font-family: 'Comic Sans MS', cursive, sans-serif;
+    font-size: 1em;
     display: flex;
     align-items: center;
     margin-bottom: 10px;

@@ -44,6 +44,13 @@ public abstract class PirateShip implements Observer, Entity {
     }
 
     /*
+     * Get movement strategy for pirate ship
+     */
+    public MovementStrategy getStrategy() {
+        return strategy;
+    } 
+
+    /*
      * Move pirate ship according to current movement strategy
      */
     public void move() {

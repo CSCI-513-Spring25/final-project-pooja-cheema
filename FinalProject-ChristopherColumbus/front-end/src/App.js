@@ -15,10 +15,10 @@ const App = () => {
     const [gameStarted, setGameStarted] = useState(false); // Tracks if game is in progress
     const [modalVisible, setModalVisible] = useState(false); // Controls modal dialog visibility
     const [collisionType, setCollisionType] = useState(''); // Stores collision happens with whom (pirate, monster)
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const [showBalloonShower, setShowBalloonShower] = useState(false); // Show balloons on win
     const [tempMessage, setTempMessage] = useState(''); // Temporary toast message
-
+    const [currentStrategy, setCurrentStrategy] = useState("slow");
 
     // Poll game state from back end every second when game is running
     useEffect(() => {
@@ -33,7 +33,6 @@ const App = () => {
             return () => clearInterval(intervalId);
         }
     }, [gameStarted]);
-
 
     // Pause/resume monster movement on server, depending on modal (visible / not visible)
     useEffect(() => {
@@ -76,10 +75,8 @@ const App = () => {
 
             setModalVisible(true);
 
-
             // Clear collision from backend
             axios.post('http://localhost:8080/api/clear-collision');
-
 
         }
     }, [gameState, modalVisible]);
@@ -137,13 +134,19 @@ const App = () => {
         setGameState(updatedState); // Update UI with new game state
     };
 
-
-
     // Start or restart the game, and reset state
     const handleStart = () => {
         setGameStarted(true);
         setGameState(null);
-        axios.post('http://localhost:8080/api/start');
+        axios.post('http://localhost:8080/api/start')
+
+            .then(() => {
+                return axios.get('http://localhost:8080/api/currentStrategy');
+            })
+            .then(res => {
+                setCurrentStrategy(res.data.strategy); // Set initial strategy
+            });
+
     };
 
     // Handle closing the modal - reset game position based on collision type
@@ -195,9 +198,34 @@ const App = () => {
                         <button className="go-back-button"
                             onClick={handleGoBack}>
                             ⬅ Go Back
+                        </button>      
+
+                        <button
+                            className="toggle-strategy-button"
+                            onClick={() => {
+                                axios.post('http://localhost:8080/api/toggleStrategy')
+                                    .then(() => {
+                                        return axios.get('http://localhost:8080/api/currentStrategy');
+                                    })
+                                    .then(res => {
+                                        setCurrentStrategy(res.data.strategy); // ✅ Update state
+                                        return axios.get('http://localhost:8080/api/state');
+                                    })
+                                    .then(response => setGameState(response.data))
+                                    .catch((err) => console.error("Strategy toggle failed:", err));
+                            }}
+                        >
+                            🔁 Toggle Slow/Fast Pirate Strategies
                         </button>
 
-                        <Controls onMove={handleMove} modalVisible={modalVisible} showTempMessage={setTempMessage} />
+                        <Controls
+                            key={currentStrategy}
+                            onMove={handleMove}
+                            modalVisible={modalVisible}
+                            showTempMessage={setTempMessage}
+                            currentStrategy={currentStrategy}
+                            setCurrentStrategy={setCurrentStrategy}
+                        />
 
                         <GameGrid gameState={gameState} />
                     </div>

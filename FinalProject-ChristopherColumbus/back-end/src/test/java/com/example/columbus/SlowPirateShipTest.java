@@ -12,7 +12,7 @@ import java.lang.reflect.Field;
 
 public class SlowPirateShipTest {
 
-    private SlowPirateShip slowPirateShip;
+    private SlowChaseStrategy slowPirateShip;
     private Game mockGame;
     private GameState mockGameState;
 
@@ -26,7 +26,7 @@ public class SlowPirateShipTest {
         when(mockGame.getState()).thenReturn(mockGameState);
 
         // Initialize the SlowPirateShip
-        slowPirateShip = new SlowPirateShip();
+        slowPirateShip = new SlowChaseStrategy();
         slowPirateShip.setPosition(new int[]{5, 5}); // Set initial position
     }
 

@@ -15,20 +15,7 @@ public class SeaMonster implements Entity {
      * Construct a sea monster at random position on grid
      */
     public SeaMonster() {
-        // Random random = new Random();
-
-        // int x, y;
-        // // Keep generating a random position until it's at least 3 cells away from
-        // (0,0)
-        // do {
-        // x = random.nextInt(20);
-        // y = random.nextInt(20);
-        // } while (Math.abs(x) + Math.abs(y) < 3); // Manhattan distance check
-
-        // this.position = new int[] { random.nextInt(20), random.nextInt(20) };
-        // this.position = new int[] { x, y }
         this.position = new int[] { 0, 0 };
-        ;
         this.initialPosition = position.clone(); // Store the initial position
     }
 
@@ -47,8 +34,7 @@ public class SeaMonster implements Entity {
         int[] ccPosition = Game.getInstance().getState().getCcPosition();
         int[] newPosition = position.clone();
 
-        // Generate random movement within 1 cell range from initial position, possible
-        // moves
+        // Generate random movement within 1 cell range from initial position, possible moves
         int[][] possibleMoves = {
                 { 0, 0 }, { 0, -1 }, { 0, 1 }, { -1, 0 }, { 1, 0 }, { -1, -1 }, { -1, 1 }, { 1, -1 }, { 1, 1 }
         };
@@ -97,10 +83,6 @@ public class SeaMonster implements Entity {
             }
         }
 
-        // System.out.println("Monster move attempt from initialPosition: (" +
-        // initialPosition[0] + "," + initialPosition[1] + ") to newPosition: (" +
-        // newPosition[0] + "," + newPosition[1] + ")");
-
     }
 
     /*
@@ -114,11 +96,6 @@ public class SeaMonster implements Entity {
     /*
      * Set current position of sea monster
      */
-    // @Override
-    // public void setPosition(int[] position) {
-    // this.position = position;
-    // }
-
     @Override
     public void setPosition(int[] position) {
         this.position = position;
