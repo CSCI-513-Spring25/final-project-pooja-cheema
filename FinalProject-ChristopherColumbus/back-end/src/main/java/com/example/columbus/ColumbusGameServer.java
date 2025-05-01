@@ -48,7 +48,7 @@ public class ColumbusGameServer extends NanoHTTPD {
 
         // Handle POST /api/reset: fully restart the game
         else if (uri.equals("/api/reset") && method == Method.POST) {
-            game.start(); // Restart the game (clears all positions, entities, and regenerates everything)
+            game.start(); // Restart the game (clear all positions, entities, and regenerate everything)
             response = newFixedLengthResponse(Response.Status.OK, "application/json",
                     "{\"status\":\"Game reset successfully\"}");
         }
@@ -68,13 +68,19 @@ public class ColumbusGameServer extends NanoHTTPD {
         // }
 
         // Handle GET /api/state: get current state of game
+        // else if (uri.equals("/api/state") && method == Method.GET) {
+        // GameState state = game.getState();
+        // String collision = game.getCollisionStatus();
+        // if (collision != null) {
+        // state.setCollision(collision); // GameState must have setCollision(String)
+        // game.setCollisionStatus(null); // Only send collision ONCE
+        // }
+        // response = newFixedLengthResponse(Response.Status.OK, "application/json",
+        // state.toJson());
+        // }
+
         else if (uri.equals("/api/state") && method == Method.GET) {
             GameState state = game.getState();
-            String collision = game.getCollisionStatus();
-            if (collision != null) {
-                state.setCollision(collision); // GameState must have setCollision(String)
-                game.setCollisionStatus(null); // Only send collision ONCE
-            }
             response = newFixedLengthResponse(Response.Status.OK, "application/json", state.toJson());
         }
 
@@ -90,6 +96,12 @@ public class ColumbusGameServer extends NanoHTTPD {
             game.startMonsterMovement();
             response = newFixedLengthResponse(Response.Status.OK, "application/json",
                     "{\"status\":\"Monster movement resumed\"}");
+        }
+
+        // Handle POST /api/resume: clear collision status
+        else if (uri.equals("/api/clear-collision") && method == Method.POST) {
+            game.setCollisionStatus(null);
+            response = newFixedLengthResponse(Response.Status.OK, "application/json", "{\"status\":\"cleared\"}");
         }
 
         // Handle any other routes: return 404

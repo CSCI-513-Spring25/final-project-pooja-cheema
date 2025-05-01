@@ -33,8 +33,7 @@
 }
 
 .left-button:hover {
-    transform: translateX(-5px);
-    /* Move left on hover */
+    transform: translateX(-5px); /* Move left on hover */
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -55,8 +54,7 @@
 }
 
 .right-button:hover {
-    transform: translateX(5px);
-    /* Move right on hover */
+    transform: translateX(5px); /* Move right on hover */
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -77,8 +75,7 @@
 }
 
 .up-button:hover {
-    transform: translateY(-5px);
-    /* Move up on hover */
+    transform: translateY(-5px); /* Move up on hover */
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -100,8 +97,7 @@
 }
 
 .down-button:hover {
-    transform: translateY(5px);
-    /* Move down on hover */
+    transform: translateY(5px); /* Move down on hover */
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -126,7 +122,6 @@
 }
 
 .reset-button:hover {
-    transform: translateY(-5px);
-    /* Move down on hover */
+    transform: translateY(-5px); /* Move up on hover */
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
 }

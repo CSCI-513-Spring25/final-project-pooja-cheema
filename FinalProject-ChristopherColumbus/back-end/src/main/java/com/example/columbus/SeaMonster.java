@@ -15,8 +15,20 @@ public class SeaMonster implements Entity {
      * Construct a sea monster at random position on grid
      */
     public SeaMonster() {
-        Random random = new Random();
-        this.position = new int[] { random.nextInt(20), random.nextInt(20) };
+        // Random random = new Random();
+
+        // int x, y;
+        // // Keep generating a random position until it's at least 3 cells away from
+        // (0,0)
+        // do {
+        // x = random.nextInt(20);
+        // y = random.nextInt(20);
+        // } while (Math.abs(x) + Math.abs(y) < 3); // Manhattan distance check
+
+        // this.position = new int[] { random.nextInt(20), random.nextInt(20) };
+        // this.position = new int[] { x, y }
+        this.position = new int[] { 0, 0 };
+        ;
         this.initialPosition = position.clone(); // Store the initial position
     }
 
@@ -26,19 +38,23 @@ public class SeaMonster implements Entity {
     }
 
     /*
-     * Move monster to random adjacent cell
+     * Move monster to random adjacent cell, that is,
+     * at most 1 cell away from initial cell in each direction and diagonally.
+     * So, it is moving within a 3*3 grid around initial position
      */
     private void moveMonster() {
         Random random = new Random();
         int[] ccPosition = Game.getInstance().getState().getCcPosition();
         int[] newPosition = position.clone();
 
-        // Generate random movement within 1 cell range from initial position, possible moves
+        // Generate random movement within 1 cell range from initial position, possible
+        // moves
         int[][] possibleMoves = {
                 { 0, 0 }, { 0, -1 }, { 0, 1 }, { -1, 0 }, { 1, 0 }, { -1, -1 }, { -1, 1 }, { 1, -1 }, { 1, 1 }
         };
 
-        int maxAttempts = 20; // Limit the number of attempts to find a valid position (to prevent infinite trying)
+        int maxAttempts = 20; // Limit the number of attempts to find a valid position (to prevent infinite
+                              // trying)
         for (int i = 0; i < maxAttempts; i++) {
             int[] move = possibleMoves[random.nextInt(possibleMoves.length)];
             newPosition[0] = initialPosition[0] + move[0];
@@ -46,7 +62,7 @@ public class SeaMonster implements Entity {
 
             // Ensure the new position is within bounds
             if (newPosition[0] >= 0 && newPosition[0] < 20 && newPosition[1] >= 0 && newPosition[1] < 20) {
-                
+
                 // Check if the new position is valid, not occupied by island
                 if (!Game.getInstance().isOccupied(newPosition)) {
                     boolean isOccupiedByPirate = false; // Do not move onto pirate
@@ -69,7 +85,7 @@ public class SeaMonster implements Entity {
                     if (!isOccupiedByPirate && !isOccupiedBySeaMonster
                             && !(newPosition[0] == ccPosition[0] && newPosition[1] == ccPosition[1])) {
 
-                        // Update GameState's occupied matrix       
+                        // Update GameState's occupied matrix
                         Game.getInstance().getState().updateSeaMonsterPosition(position, newPosition);
 
                         // Move monster
@@ -80,6 +96,11 @@ public class SeaMonster implements Entity {
                 }
             }
         }
+
+        // System.out.println("Monster move attempt from initialPosition: (" +
+        // initialPosition[0] + "," + initialPosition[1] + ") to newPosition: (" +
+        // newPosition[0] + "," + newPosition[1] + ")");
+
     }
 
     /*
@@ -93,8 +114,15 @@ public class SeaMonster implements Entity {
     /*
      * Set current position of sea monster
      */
+    // @Override
+    // public void setPosition(int[] position) {
+    // this.position = position;
+    // }
+
     @Override
     public void setPosition(int[] position) {
         this.position = position;
+        this.initialPosition = position.clone(); // So monster moves within 3x3 from actual spawn
     }
+
 }

@@ -35,7 +35,6 @@ const App = () => {
     }, [gameStarted]);
 
 
-
     // Pause/resume monster movement on server, depending on modal (visible / not visible)
     useEffect(() => {
 
@@ -44,11 +43,46 @@ const App = () => {
 
         if (modalVisible) {
             axios.post('http://localhost:8080/api/pause');
-        } 
+        }
         else {
             axios.post('http://localhost:8080/api/resume');
         }
     }, [modalVisible, gameStarted]);
+
+
+    // Detect collision sent by backend (even if not from movement)
+    useEffect(() => {
+        if (gameState && gameState.collision && !modalVisible) {
+            setCollisionType(gameState.collision);
+
+            switch (gameState.collision) {
+                case "treasure":
+                    setNotification("Yay!! Reached the treasure!");
+                    setShowBalloonShower(true);
+                    break;
+                case "monster":
+                    setNotification("Chomp! The sea monster got you. Restart from Cell 1.");
+                    break;
+                case "pirate":
+                    setNotification("Hijacked! Your voyage ends in pirate chains.. Begin again!");
+                    break;
+                case "island":
+                    setTempMessage("Island ahead! Change your way.");
+                    setTimeout(() => setTempMessage(''), 1500);
+                    return; // Don't show modal
+                default:
+                    setNotification("");
+            }
+
+            setModalVisible(true);
+
+
+            // Clear collision from backend
+            axios.post('http://localhost:8080/api/clear-collision');
+
+
+        }
+    }, [gameState, modalVisible]);
 
 
     // Handle result of player movement (called by controls component)
@@ -72,8 +106,8 @@ const App = () => {
             setCollisionType("pirate");
             setNotification("Hijacked! Your voyage ends in pirate chains.. Begin again!");
             setModalVisible(true);
-        } 
-        
+        }
+
         // Handle collision responses sent by back end (treasure, monster, island)
         else if (updatedState.collision) {
             setCollisionType(updatedState.collision);
@@ -162,7 +196,7 @@ const App = () => {
                             onClick={handleGoBack}>
                             ⬅ Go Back
                         </button>
-                        
+
                         <Controls onMove={handleMove} modalVisible={modalVisible} showTempMessage={setTempMessage} />
 
                         <GameGrid gameState={gameState} />

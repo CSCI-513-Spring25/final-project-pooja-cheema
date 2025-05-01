@@ -21,6 +21,7 @@ const GameGrid = ({ gameState }) => {
             setTreasurePosition(Array.isArray(gameState.treasurePosition) ? gameState.treasurePosition : [19, 19]);
             setPirates(Array.isArray(gameState.pirates) ? gameState.pirates.map(p => ({ position: p.position, type: p.type })) : []);
             setMonsters(Array.isArray(gameState.seaMonsters) ? gameState.seaMonsters.map(m => m.position) : []);
+            // setMonsters(gameState.seaMonsters.map(m => m.position));
             setIslands(Array.isArray(gameState.islands) ? gameState.islands : []);
         }
     }, [gameState]);

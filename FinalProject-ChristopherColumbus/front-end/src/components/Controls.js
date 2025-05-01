@@ -78,6 +78,9 @@ const Controls = ({ onMove, showTempMessage, modalVisible }) => {
     }, [modalVisible]);
 
 
+    /**
+     * Handle Reset button functionality
+     */
     const handleReset = async () => {
         try {
             const response = await axios.post('http://localhost:8080/api/reset');
