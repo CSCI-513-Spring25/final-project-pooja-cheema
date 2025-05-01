@@ -39,11 +39,18 @@ public class ColumbusGameServer extends NanoHTTPD {
             response = newFixedLengthResponse(Response.Status.OK, MIME_PLAINTEXT, "");
         }
 
-        // Handle POST /api/start: start/restart the game
+        // Handle POST /api/start: start the game
         else if (uri.equals("/api/start") && method == Method.POST) {
-            game.start(); // Start (reset) the game
+            game.start(); // Start the game
 
             response = newFixedLengthResponse(Response.Status.OK, "application/json", "{\"status\":\"Game started\"}");
+        }
+
+        // Handle POST /api/reset: fully restart the game
+        else if (uri.equals("/api/reset") && method == Method.POST) {
+            game.start(); // Restart the game (clears all positions, entities, and regenerates everything)
+            response = newFixedLengthResponse(Response.Status.OK, "application/json",
+                    "{\"status\":\"Game reset successfully\"}");
         }
 
         // Handle POST /api/move: move ship in a direction

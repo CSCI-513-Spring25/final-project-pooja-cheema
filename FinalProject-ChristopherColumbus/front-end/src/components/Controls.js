@@ -77,12 +77,29 @@ const Controls = ({ onMove, showTempMessage, modalVisible }) => {
         };
     }, [modalVisible]);
 
+
+    const handleReset = async () => {
+        try {
+            const response = await axios.post('http://localhost:8080/api/reset');
+            if (response.status === 200 && onMove) {
+                // Optionally re-fetch the game state
+                const newState = await axios.get('http://localhost:8080/api/state');
+                onMove(newState.data);
+            }
+        } catch (error) {
+            console.error("Error resetting game:", error);
+        }
+    };
+
+    
+
     return (
         <div className="controls">
             <button className="left-button" onClick={() => move('left')}>Left</button>
             <button className="right-button" onClick={() => move('right')}>Right</button>
             <button className="up-button" onClick={() => move('up')}>Up</button>
             <button className="down-button" onClick={() => move('down')}>Down</button>
+            <button className="reset-button" onClick={handleReset}>Reset Game</button>
             <IconManual />
         </div>
     );

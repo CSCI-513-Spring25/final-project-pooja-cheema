@@ -74,17 +74,18 @@ public class Game {
         islands.clear();
         observers.clear();
 
-        // Randomly generate and place treasure, on unoccupied cell
-        Random random = new Random();
-        do {
-            treasurePosition = new int[] { random.nextInt(GRID_SIZE), random.nextInt(GRID_SIZE) };
-        } while (occupiedPositions.contains(treasurePosition[0] + "," + treasurePosition[1]));
-        occupiedPositions.add(treasurePosition[0] + "," + treasurePosition[1]);
+        // // Randomly generate and place treasure, on unoccupied cell
+        // Random random = new Random();
+        // do {
+        //     treasurePosition = new int[] { random.nextInt(GRID_SIZE), random.nextInt(GRID_SIZE) };
+        // } while (occupiedPositions.contains(treasurePosition[0] + "," + treasurePosition[1]));
+        // occupiedPositions.add(treasurePosition[0] + "," + treasurePosition[1]);
 
         // Recreate pirates, monsters, islands for fresh game
         createPirates();
         createMonsters();
         createIslands();
+        createTreasure();
         notifyObservers();
 
         // Start scheduled movement of monster and pirate patrolling
@@ -171,6 +172,18 @@ public class Game {
      */
     public synchronized GameState getState() {
         return new GameState(ccPosition, treasurePosition, pirates, monsters, islands, null);
+    }
+
+    /*
+     * This method places treasure on the grid at random position each time
+     */
+    public void createTreasure() {
+        // Randomly generate and place treasure, on unoccupied cell
+        Random random = new Random();
+        do {
+            treasurePosition = new int[] { random.nextInt(GRID_SIZE), random.nextInt(GRID_SIZE) };
+        } while (occupiedPositions.contains(treasurePosition[0] + "," + treasurePosition[1]));
+        occupiedPositions.add(treasurePosition[0] + "," + treasurePosition[1]);
     }
 
     /*
