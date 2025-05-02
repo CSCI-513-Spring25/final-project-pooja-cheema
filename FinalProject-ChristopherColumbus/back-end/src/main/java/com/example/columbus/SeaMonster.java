@@ -35,14 +35,12 @@ public class SeaMonster implements Entity {
         int[] ccPosition = Game.getInstance().getState().getCcPosition();
         int[] newPosition = position.clone();
 
-        // Generate random movement within 1 cell range from initial position, possible
-        // moves
+        // Generate random movement within 1 cell range from initial position, possible moves
         int[][] possibleMoves = {
                 { 0, 0 }, { 0, -1 }, { 0, 1 }, { -1, 0 }, { 1, 0 }, { -1, -1 }, { -1, 1 }, { 1, -1 }, { 1, 1 }
         };
 
-        int maxAttempts = 20; // Limit the number of attempts to find a valid position (to prevent infinite
-                              // trying)
+        int maxAttempts = 20; // Limit the number of attempts to find a valid position (to prevent infinite trying)
         for (int i = 0; i < maxAttempts; i++) {
             int[] move = possibleMoves[random.nextInt(possibleMoves.length)];
             newPosition[0] = initialPosition[0] + move[0];
@@ -54,8 +52,8 @@ public class SeaMonster implements Entity {
                 // Check if the new position is valid, not occupied by island
                 if (!Game.getInstance().getGameStateManager().isOccupied(newPosition)) {
 
-                // if (!Game.getInstance().isOccupied(newPosition)) {
-                
+                    // if (!Game.getInstance().isOccupied(newPosition)) {
+
                     boolean isOccupiedByPirate = false; // Do not move onto pirate
                     for (PirateShipState pirate : Game.getInstance().getState().getPirates()) {
                         if (pirate.getPosition()[0] == newPosition[0] && pirate.getPosition()[1] == newPosition[1]) {
@@ -73,8 +71,11 @@ public class SeaMonster implements Entity {
                         }
                     }
                     // Ensure the new position is not occupied by the CC
+                    // And make monster ignore CC when it is invisible
                     if (!isOccupiedByPirate && !isOccupiedBySeaMonster
-                            && !(newPosition[0] == ccPosition[0] && newPosition[1] == ccPosition[1])) {
+                            && !(Game.getInstance().getColumbus().isInvisible() &&
+                                    newPosition[0] == ccPosition[0] &&
+                                    newPosition[1] == ccPosition[1])) {
 
                         // Update GameState's occupied matrix
                         Game.getInstance().getState().updateSeaMonsterPosition(position, newPosition);

@@ -63,7 +63,9 @@ public abstract class PirateShip implements Observer, Entity {
      */
     @Override
     public void update(int[] ccPosition) {
-        move();
+        if (!isIgnoringColumbus()) {
+            move();  // Only chase CC when not ignoring
+        }
     }
 
     @Override

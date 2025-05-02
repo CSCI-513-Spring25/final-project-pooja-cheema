@@ -3,7 +3,7 @@ package com.example.columbus;
 import java.util.*;
 
 public class GameStateManager {
-    private int[] ccPosition = { 0, 0 };
+    private ColumbusShip columbus = new ConcreteColumbusShip();
     private int[] treasurePosition = { 19, 19 };
     private String collisionStatus = null;
     private Set<String> occupied = new HashSet<>();
@@ -15,24 +15,24 @@ public class GameStateManager {
     }
 
     public void reset() {
-        ccPosition = new int[] { 0, 0 };
-        // treasurePosition = new int[]{19, 19};
 
+        columbus = new ConcreteColumbusShip();
+        columbus.setPosition(new int[] { 0, 0 });
 
         Random r = new Random();
         do {
             treasurePosition = new int[] { r.nextInt(20), r.nextInt(20) };
-        } while (Arrays.equals(treasurePosition, ccPosition) || isOccupied(treasurePosition));
+        } while (Arrays.equals(treasurePosition, columbus.getPosition()) || isOccupied(treasurePosition));
         addOccupied(treasurePosition);
 
-        
         collisionStatus = null;
         occupied.clear();
-        occupied.add("0,0");
+        addOccupied(columbus.getPosition());
+
     }
 
     public GameState handleMove(String direction, EntityManager em, ObserverManager om) {
-        int[] newPosition = ccPosition.clone();
+        int[] newPosition = columbus.getPosition().clone();
 
         // Compute new position based on direction
         switch (direction) {
@@ -51,27 +51,43 @@ public class GameStateManager {
         }
 
         if (em.isIsland(newPosition))
-            return new GameState(ccPosition, treasurePosition, em.getPirates(), em.getMonsters(), em.getIslands(),
-                    "island");
+            return new GameState(columbus.getPosition(), treasurePosition, em.getPirates(), em.getMonsters(),
+                    em.getIslands(),
+                    "island", columbus);
         if (em.isMonster(newPosition)) {
-            ccPosition = new int[] { 0, 0 };
-            om.notifyObservers(ccPosition);
-            return new GameState(ccPosition, treasurePosition, em.getPirates(), em.getMonsters(), em.getIslands(),
-                    "monster");
+            columbus.setPosition(newPosition); // Update cc position
+            om.notifyObservers(columbus.getPosition());
+
+            columbus.decrementCloak(); // Decrement invisibility duration
+            UnwrapColumbus(); // Replace decorator with base CC ship if cloak expired
+
+            return new GameState(columbus.getPosition(), treasurePosition, em.getPirates(), em.getMonsters(),
+                    em.getIslands(),
+                    "monster", columbus);
         }
         if (em.isPirate(newPosition)) {
             reset();
             em.initializeEntities(om);
-            om.notifyObservers(ccPosition);
-            return new GameState(ccPosition, treasurePosition, em.getPirates(), em.getMonsters(), em.getIslands(),
-                    "pirate");
+            om.notifyObservers(columbus.getPosition());
+            return new GameState(columbus.getPosition(), treasurePosition, em.getPirates(), em.getMonsters(),
+                    em.getIslands(),
+                    "pirate", columbus);
         }
         if (Arrays.equals(newPosition, treasurePosition))
-            return new GameState(ccPosition, treasurePosition, em.getPirates(), em.getMonsters(), em.getIslands(),
-                    "treasure");
-        ccPosition = newPosition;
-        om.notifyObservers(ccPosition);
-        return new GameState(ccPosition, treasurePosition, em.getPirates(), em.getMonsters(), em.getIslands(), null);
+            return new GameState(columbus.getPosition(), treasurePosition, em.getPirates(), em.getMonsters(),
+                    em.getIslands(),
+                    "treasure", columbus);
+        columbus.setPosition(newPosition); // Update cc position
+
+        om.notifyObservers(columbus.getPosition());
+
+        entityManager.getPirateGroup().decrementIgnoreTurns(); // Decrement invisibility turns
+
+        columbus.decrementCloak(); // decrement invisibility cloak
+        UnwrapColumbus(); // unwrap after cloak expires
+
+        return new GameState(columbus.getPosition(), treasurePosition, em.getPirates(), em.getMonsters(),
+                em.getIslands(), null, columbus);
     }
 
     public void hijackByPirate() {
@@ -83,40 +99,44 @@ public class GameStateManager {
         occupied.add("0,0");
     }
 
-    
     public void setEntityManager(EntityManager em) {
         this.entityManager = em;
     }
 
     public GameState getState() {
         return new GameState(
-                ccPosition,
+                columbus.getPosition(),
                 treasurePosition,
                 entityManager.getPirates(),
                 entityManager.getMonsters(),
                 entityManager.getIslands(),
-                collisionStatus);
+                collisionStatus,
+                columbus);
     }
-
-    // public void setEntityManager(EntityManager em) {
-    // this.entityManager = em;
-    // }
 
     public void setCollisionStatus(String status) {
         this.collisionStatus = status;
     }
 
-    // public GameState getState() {
-    // return new GameState(ccPosition, treasurePosition, null, null, null,
-    // collisionStatus);
-    // }
-
     public int[] getCcPosition() {
-        return ccPosition;
+        return columbus.getPosition();
     }
 
     public boolean isOccupied(int[] pos) {
         return occupied.contains(pos[0] + "," + pos[1]);
+    }
+
+    public boolean isColumbusInvisible() {
+        return columbus.isInvisible();
+    }
+
+    public void UnwrapColumbus() {
+        if (columbus instanceof InvisibleColumbusDecorator) {
+            ColumbusShip unwrapped = ((InvisibleColumbusDecorator) columbus).unwrapIfExpired();
+            if (unwrapped != columbus) {
+                columbus = unwrapped;
+            }
+        }
     }
 
     public void addOccupied(int[] pos) {
@@ -130,5 +150,13 @@ public class GameStateManager {
     public String getCollisionStatus() {
         return collisionStatus;
     }
-    
+
+    public ColumbusShip getColumbus() {
+        return columbus;
+    }
+
+    public void setColumbus(ColumbusShip columbus) {
+        this.columbus = columbus;
+    }
+
 }

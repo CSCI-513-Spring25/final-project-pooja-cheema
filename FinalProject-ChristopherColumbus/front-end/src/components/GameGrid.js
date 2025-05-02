@@ -13,6 +13,7 @@ const GameGrid = ({ gameState }) => {
     const [monsters, setMonsters] = useState([]);
     const [islands, setIslands] = useState([]);
     const [viewPort, setViewPort] = useState({ x: 0, y: 0 }); // For scrolling or zooming
+    const isInvisible = gameState?.columbusInvisible;
 
     // Update state from gamestate prop whenever it changes
     useEffect(() => {
@@ -32,9 +33,14 @@ const GameGrid = ({ gameState }) => {
      */
     const renderCell = (rowIndex, cellIndex) => {
 
-        // Columbus ship
         if (ccPosition[0] === rowIndex && ccPosition[1] === cellIndex) {
-            return <img src="/images/CCship.png" alt="CC" className='cc' />;
+            return (
+                <img
+                    src="/images/CCship.png"
+                    alt="CC"
+                    className={`cc ${isInvisible ? 'invisible' : ''}`}
+                />
+            );
         }
 
         // Treasure

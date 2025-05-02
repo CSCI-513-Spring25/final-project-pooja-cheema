@@ -7,9 +7,10 @@ public class EntityManager {
     private List<Entity> monsters = new ArrayList<>();
     private List<int[]> islands = new ArrayList<>();
     private EntityGroup monsterGroup = new EntityGroup();
-    private EntityGroup pirateGroup = new EntityGroup();
     private GameStateManager stateManager;
     private String currentStrategy = "slow";
+
+    private EntityGroup pirateGroup = new EntityGroup(); // Composite group for fast & slow pirates
 
     private PatrolPirateShip patrolPirate;
 
@@ -126,8 +127,8 @@ public class EntityManager {
     } 
 
     public void activateInvisibilityCloak() {
-        monsterGroup.activateIgnoreMode(3);
-        pirateGroup.activateIgnoreMode(3);
+        // monsterGroup.activateIgnoreMode(3);
+        pirateGroup.activateIgnoreMode(5); // Ignore CC for 5 turns 
     }
 
     public PatrolPirateShip getPatrolPirate() {
@@ -150,6 +151,11 @@ public class EntityManager {
         return currentStrategy;
     }
 
+    public EntityGroup getPirateGroup() {
+        return pirateGroup;
+    }
+
+    
     public boolean isIsland(int[] pos) {
         return islands.stream().anyMatch(p -> Arrays.equals(p, pos));
     }

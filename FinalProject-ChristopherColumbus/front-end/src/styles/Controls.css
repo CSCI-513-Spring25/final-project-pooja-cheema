@@ -163,3 +163,42 @@
     /* Move up on hover */
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
 }
+
+.cloak-button {
+    position: absolute;
+    width: 218px;
+    /* bottom: 500px; */
+    height: 30px;
+    margin-top: -55px;
+    /* margin: 50px; */
+    margin-left: 700px;
+    /* margin-bottom: 900px; */
+    font-size: 15px;
+    cursor: pointer;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    padding: 10px 20px;
+    padding-top: 0.3ch;
+}
+
+.cloak-button:hover {
+    transform: translateY(-5px);
+    /* Move up on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cc.invisible {
+    animation: glow 0.4s infinite alternate;
+    /* filter: drop-shadow(0 0 6px cyan); */
+
+}
+
+@keyframes glow {
+    from { filter: drop-shadow(0 0 15px rgb(132, 45, 231)); }
+    to { filter: drop-shadow(0 0 15px rgb(247, 224, 18)); }
+}

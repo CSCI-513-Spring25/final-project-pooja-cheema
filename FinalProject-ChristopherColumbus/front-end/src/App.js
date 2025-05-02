@@ -198,7 +198,7 @@ const App = () => {
                         <button className="go-back-button"
                             onClick={handleGoBack}>
                             ⬅ Go Back
-                        </button>      
+                        </button>
 
                         <button
                             className="toggle-strategy-button"
@@ -216,6 +216,17 @@ const App = () => {
                             }}
                         >
                             🔁 Toggle Slow/Fast Pirate Strategies
+                        </button>
+
+                        <button
+                            className="cloak-button"
+                            onClick={() => {
+                                axios.post('http://localhost:8080/api/activateInvisibility')
+                                    .then(() => axios.get('http://localhost:8080/api/state'))
+                                    .then(res => setGameState(res.data));
+                            }}
+                        >
+                            🧥 CC's Invisibility Cloak
                         </button>
 
                         <Controls

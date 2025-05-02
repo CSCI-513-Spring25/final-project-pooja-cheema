@@ -13,13 +13,15 @@ package com.example.columbus;
      */
     @Override
     public void move(PirateShip pirate) {
-        
-        // Game.getInstance().getGameStateManager().isOccupied(newPosition);
+
+        if (Game.getInstance().getColumbus().isInvisible()) {
+            return; // Don't chase if Columbus is invisible
+        }
 
         Game game = Game.getInstance();
         GameStateManager gsm = game.getGameStateManager();
 
-        int[] ccPosition = Game.getInstance().getState().getCcPosition(); // CC's current position
+        int[] ccPosition = Game.getInstance().getColumbus().getPosition(); // CC's current position
         int[] position = pirate.getPosition(); // Get position from pirate
         int[] newPosition = position.clone(); // Copy current position for manipulation
 
@@ -29,7 +31,6 @@ package com.example.columbus;
 
             // Check if blocked by obstacle or trying to move to (0,0)
             if (gsm.isOccupied(newPosition) || (newPosition[0] == 0 && newPosition[1] == 0)) {
-            // if (Game.getInstance().isOccupied(newPosition) || (newPosition[0] == 0 && newPosition[1] == 0)) {
                 
                 // If can't move up, alternatively move left/rigt towards CC
                 if (ccPosition[1] < position[1]) { // CC is to the left
@@ -38,8 +39,6 @@ package com.example.columbus;
                     newPosition = tryMove(position, "right", "left");
                 }
             }
-            
-            // updatePosition(newPosition);
             pirate.setPosition(newPosition);
 
             return;
@@ -64,7 +63,6 @@ package com.example.columbus;
         
         else if (ccPosition[1] < position[1]) { // CC is to the left (same row)
             newPosition[1] = Math.max(position[1] - 2, 0);
-            // if (Game.getInstance().isOccupied(newPosition) || (newPosition[0] == 0 && newPosition[1] == 0)) {
                 if (gsm.isOccupied(newPosition) || (newPosition[0] == 0 && newPosition[1] == 0)) {
                 
                 // If can't move left, alternatively move up/down towards CC
@@ -82,7 +80,6 @@ package com.example.columbus;
         
         else if (ccPosition[1] > position[1]) { // CC is to the right (same row)
             newPosition[1] = Math.min(position[1] + 2, 19);
-            // if (Game.getInstance().isOccupied(newPosition) || (newPosition[0] == 0 && newPosition[1] == 0)) {
                 if (gsm.isOccupied(newPosition) || (newPosition[0] == 0 && newPosition[1] == 0)) {
                 
                 // If can't move right, alternatively move up/down towards CC
@@ -92,7 +89,6 @@ package com.example.columbus;
                     newPosition = tryMove(position, "down", "up");
                 }
             }
-            // updatePosition(newPosition);
             pirate.setPosition(newPosition);
 
             return;
@@ -129,7 +125,6 @@ package com.example.columbus;
         
         // Move ahead if way is not blocked
         if (gsm.isOccupied(newPosition)) {
-        // if (!Game.getInstance().isOccupied(newPosition)) {
             return newPosition; // Success
         }
 

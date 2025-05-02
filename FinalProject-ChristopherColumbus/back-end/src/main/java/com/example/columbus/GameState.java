@@ -17,13 +17,14 @@ public class GameState {
     private List<int[]> islands; // Positions of all islands
     private String collision; // Information about collision of CC with island/monster/pirate
     private boolean[][] occupiedPositions; // Grid to track occupied positions
+    private boolean columbusInvisible; // When CC invisible
 
      
     /*
      * GameState constructor to capture current game state
      */
     public GameState(int[] ccPosition, int[] treasurePosition, List<PirateShip> pirates, List<Entity> monsters,
-            List<int[]> islands, String collision) {
+            List<int[]> islands, String collision, ColumbusShip columbus) {
         this.ccPosition = ccPosition;
         this.treasurePosition = treasurePosition;
 
@@ -40,6 +41,8 @@ public class GameState {
         this.islands = islands;
         this.collision = collision;
 
+        this.columbusInvisible = columbus.isInvisible();
+
         this.occupiedPositions = new boolean[20][20]; // Initialize the grid
         updateOccupiedPositions(); // Update occupied positions initially
     }
@@ -50,6 +53,11 @@ public class GameState {
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);
+    }
+
+    // Check if CC i invisible
+    public boolean isColumbusInvisible() {
+        return columbusInvisible;
     }
 
     // Getters for serialization (if needed)

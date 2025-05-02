@@ -18,7 +18,6 @@ public class Game {
         movementController = new MovementController(stateManager, entityManager);
 
         entityManager.initializeEntities(observerManager);
-        // movementController.startMonsterMovement();
 
         movementController.startAll();
     }
@@ -59,8 +58,14 @@ public class Game {
     }
 
     public void activateInvisibilityCloak() {
-        entityManager.activateInvisibilityCloak();
+        ColumbusShip cloaked = new InvisibleColumbusDecorator(stateManager.getColumbus(), 5);
+        stateManager.setColumbus(cloaked);
     }
+
+    public ColumbusShip getColumbus() {
+        return stateManager.getColumbus();
+    }
+    
 
     public String getCurrentStrategy() {
         return entityManager.getCurrentStrategy();
@@ -78,64 +83,3 @@ public class Game {
         return entityManager;
     }
 } 
-
-
-
-
-
-
-
-
-
-// package com.example.columbus;
-
-// public class Game {
-//     private static Game instance;
-//     private GameStateManager stateManager;
-//     private EntityManager entityManager;
-//     private MovementController movementController;
-//     private ObserverManager observerManager;
-
-//     private Game() {
-//         stateManager = new GameStateManager();
-//         entityManager = new EntityManager(stateManager);
-//         observerManager = new ObserverManager();
-//         movementController = new MovementController(stateManager, entityManager);
-
-//         entityManager.initializeEntities(observerManager);
-//         movementController.startAll();
-//     }
-
-//     public static synchronized Game getInstance() {
-//         if (instance == null) {
-//             instance = new Game();
-//         }
-//         return instance;
-//     }
-
-//     public void start() {
-//         stateManager.reset();
-//         entityManager.initializeEntities(observerManager);
-//         movementController.restart();
-//     }
-
-//     public GameState move(String direction) {
-//         return stateManager.handleMove(direction, entityManager, observerManager);
-//     }
-
-//     public GameState getState() {
-//         return stateManager.getState();
-//     }
-
-//     public void togglePirateStrategies() {
-//         entityManager.toggleStrategies();
-//     }
-
-//     public void activateInvisibilityCloak() {
-//         entityManager.activateInvisibilityCloak();
-//     }
-
-//     public String getCurrentStrategy() {
-//         return entityManager.getCurrentStrategy();
-//     }
-// }

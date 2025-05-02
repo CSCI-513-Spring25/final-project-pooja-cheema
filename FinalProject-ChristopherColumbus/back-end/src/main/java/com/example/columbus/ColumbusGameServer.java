@@ -100,6 +100,14 @@ public class ColumbusGameServer extends NanoHTTPD {
                     "{\"strategy\":\"" + strategy + "\"}");
         }
 
+        // Handle GET /api/activateInvisibility: Invisibility power to Cc
+        else if (uri.equals("/api/activateInvisibility") && method == Method.POST) {
+            game.activateInvisibilityCloak();
+            response = newFixedLengthResponse(Response.Status.OK, "application/json",
+                "{\"status\":\"Cloak activated\"}");
+        }
+        
+
         // Handle any other routes: return 404
         else {
             response = newFixedLengthResponse(Response.Status.NOT_FOUND, "text/plain", "Not Found");

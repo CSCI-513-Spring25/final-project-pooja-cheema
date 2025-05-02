@@ -9,7 +9,13 @@ public class SlowChaseStrategy implements MovementStrategy {
     // Move pirate ship 1 cell closer to CC, avoid islands
     @Override
     public void move(PirateShip pirate) {
-        int[] ccPosition = Game.getInstance().getState().getCcPosition();
+
+        if (Game.getInstance().getColumbus().isInvisible()) {
+            return; // Don't chase if Columbus is invisible
+        }
+
+        int[] ccPosition = Game.getInstance().getColumbus().getPosition();
+
         int[] position = pirate.getPosition(); // Get position from pirate
         int[] newPosition = position.clone();
 
@@ -27,7 +33,6 @@ public class SlowChaseStrategy implements MovementStrategy {
                     newPosition = tryMove(position, "right", "left");
                 }
             }
-            // updatePosition(newPosition);
             pirate.setPosition(newPosition);
             return;
         } 
@@ -39,14 +44,13 @@ public class SlowChaseStrategy implements MovementStrategy {
             // If blocked, alternatively move left/right
             if (Game.getInstance().getGameStateManager().isOccupied(newPosition) || 
             (newPosition[0] == 0 && newPosition[1] == 0)) {
-            // if (Game.getInstance().isOccupied(newPosition) || (newPosition[0] == 0 && newPosition[1] == 0)) {
+
                 if (ccPosition[1] < position[1]) { // CC is to the left
                     newPosition = tryMove(position, "left", "right");
                 } else { // CC is to the right
                     newPosition = tryMove(position, "right", "left");
                 }
             }
-            // updatePosition(newPosition);
             pirate.setPosition(newPosition);
             return;
         } 
@@ -58,14 +62,14 @@ public class SlowChaseStrategy implements MovementStrategy {
             // If blocked, alternatively move up/down
             if (Game.getInstance().getGameStateManager().isOccupied(newPosition) || 
             (newPosition[0] == 0 && newPosition[1] == 0)) {
-            // if (Game.getInstance().isOccupied(newPosition) || (newPosition[0] == 0 && newPosition[1] == 0)) {
+
                 if (ccPosition[0] < position[0]) { // CC is above
                     newPosition = tryMove(position, "up", "down");
                 } else { // CC is below
                     newPosition = tryMove(position, "down", "up");
                 }
             }
-            // updatePosition(newPosition);
+ 
             pirate.setPosition(newPosition);
             return;
         } 
@@ -77,14 +81,14 @@ public class SlowChaseStrategy implements MovementStrategy {
             // If blocked, alternatively move up/down
             if (Game.getInstance().getGameStateManager().isOccupied(newPosition) || 
             (newPosition[0] == 0 && newPosition[1] == 0)) {
-            // if (Game.getInstance().isOccupied(newPosition) || (newPosition[0] == 0 && newPosition[1] == 0)) {
+
                 if (ccPosition[0] < position[0]) { // CC is above
                     newPosition = tryMove(position, "up", "down");
                 } else { // CC is below
                     newPosition = tryMove(position, "down", "up");
                 }
             }
-            // updatePosition(newPosition);
+
             pirate.setPosition(newPosition);
 
             return;

@@ -23,10 +23,6 @@ public class EntityGroup implements Entity {
         return entities;
     }
 
-    // public void activateIgnoreMode(int turns) {
-    //     this.ignoreTurns = turns;
-    // }
-
     public boolean isIgnoring() {
         return ignoreTurns > 0;
     }
@@ -49,6 +45,7 @@ public class EntityGroup implements Entity {
         }
     }
     
+    // Decrement number of CC's turns ignored by slow and fast pirates
     public void decrementIgnoreTurns() {
         for (Entity entity : entities) {
             entity.decrementIgnoreTurns();
