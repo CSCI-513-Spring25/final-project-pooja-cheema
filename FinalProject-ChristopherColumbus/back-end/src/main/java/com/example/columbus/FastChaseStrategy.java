@@ -72,9 +72,7 @@ package com.example.columbus;
                     newPosition = tryMove(position, "down", "up");
                 }
             }
-            // updatePosition(newPosition);
             pirate.setPosition(newPosition);
-
             return;
         } 
         
@@ -90,13 +88,9 @@ package com.example.columbus;
                 }
             }
             pirate.setPosition(newPosition);
-
             return;
         }
-
         pirate.setPosition(newPosition);
-
-
     }
 
     /*
@@ -146,5 +140,4 @@ package com.example.columbus;
         }
         return newPosition; // Could still be blocked
     }
-
 }

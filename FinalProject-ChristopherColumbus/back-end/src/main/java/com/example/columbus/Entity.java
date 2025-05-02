@@ -1,6 +1,8 @@
 package com.example.columbus;
 
-// Represents movable entities (Christopher ship, pirate ships, monsters)
+/** 
+ * Interface representing movable entities (Christopher ship, pirate ships, monsters)
+ */
 public interface Entity {
     public void move(); // Method for movement logic
 
@@ -10,10 +12,10 @@ public interface Entity {
 
     public void activateIgnoreMode(int turns); // Method to activate ignore mode by pirates for CC
 
-    default boolean isIgnoringColumbus() {
+    default boolean isIgnoringColumbus() { // If entity is in ignoring-CC mode
         return false;
     }
 
-    public void decrementIgnoreTurns();
+    public void decrementIgnoreTurns(); // Decrement CC's invisible cloak turns
 
 }

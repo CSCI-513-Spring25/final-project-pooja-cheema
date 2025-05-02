@@ -68,16 +68,21 @@ public abstract class PirateShip implements Observer, Entity {
         }
     }
 
+    /*
+     * Activate ignore mode when CC gets invisibility power
+     */
     @Override
     public void activateIgnoreMode(int turns) {
         this.ignoreTurns = turns;
     }
 
+    // Track if pirate is ignoring CC
     @Override
     public boolean isIgnoringColumbus() {
         return ignoreTurns > 0;
     }
 
+    // Decrement number of total CC turns passed after getting invisibility power
     @Override
     public void decrementIgnoreTurns() {
         if (ignoreTurns > 0)

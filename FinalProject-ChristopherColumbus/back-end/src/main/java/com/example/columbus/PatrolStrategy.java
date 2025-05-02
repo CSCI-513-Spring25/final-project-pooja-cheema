@@ -32,7 +32,7 @@ public class PatrolStrategy implements MovementStrategy {
 
         boolean goingDown = (col % 2 == 0); // Even columns: go down, odd columns: go up
         int nextRow = row, nextCol = col;
-        int lastCol = (colDirection == 1) ? 19 : 0;
+        // int lastCol = (colDirection == 1) ? 19 : 0;
         int[] treasure = game.getState().getTreasurePosition();
 
         // Move within the current column

@@ -60,6 +60,7 @@ public class ColumbusGameServer extends NanoHTTPD {
             response = newFixedLengthResponse(Response.Status.OK, "application/json", result.toJson());
         }
 
+        // Handle GET /api/state: GET request to retrieve current game state as JSON
         else if (uri.equals("/api/state") && method == Method.GET) {
             GameState state = game.getState();
             response = newFixedLengthResponse(Response.Status.OK, "application/json", state.toJson());
@@ -87,6 +88,7 @@ public class ColumbusGameServer extends NanoHTTPD {
             response = newFixedLengthResponse(Response.Status.OK, "application/json", "{\"status\":\"cleared\"}");
         }
 
+        // Handle POST /api/toggleStrategy: Toggle pirate chase strategies
         else if (uri.equals("/api/toggleStrategy") && method == Method.POST) {
             game.togglePirateStrategies(); // or Game.getInstance().togglePirateStrategies();
             response = newFixedLengthResponse(Response.Status.OK, "application/json",
@@ -107,7 +109,6 @@ public class ColumbusGameServer extends NanoHTTPD {
                 "{\"status\":\"Cloak activated\"}");
         }
         
-
         // Handle any other routes: return 404
         else {
             response = newFixedLengthResponse(Response.Status.NOT_FOUND, "text/plain", "Not Found");

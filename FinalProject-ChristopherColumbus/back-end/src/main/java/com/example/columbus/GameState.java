@@ -40,7 +40,6 @@ public class GameState {
                 .collect(Collectors.toList());
         this.islands = islands;
         this.collision = collision;
-
         this.columbusInvisible = columbus.isInvisible();
 
         this.occupiedPositions = new boolean[20][20]; // Initialize the grid
@@ -90,7 +89,6 @@ public class GameState {
     public String getCollision() {
         return collision;
     }
-
 
     // Check if a position is occupied
     public boolean isOccupied(int[] position) {
@@ -164,6 +162,13 @@ public class GameState {
         this.collision = collision; 
     }
 
+    public String getCollisionStatus() {
+        return collision;
+    }
+
+    public void setTreasurePosition(int[] pos) {
+        this.treasurePosition = pos;
+    }
 
     /*
      * This inner class represents the state of a pirate ship

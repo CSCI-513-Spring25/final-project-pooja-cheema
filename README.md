@@ -5,3 +5,16 @@ Created by:
 
 Pooja Cheema
 Z2049497
+
+**Features: (Explained in Game Design Features Doc)
+1. Implemented 7 design Patterns
+    Singleton Design Pattern
+    Observer Design Pattern
+    Strategy Design Pattern
+    Factory Design Pattern
+    Composite Design Pattern
+    Decorator Design Pattern
+    Facade Design Pattern
+
+2. Used multithreading
+3. Implemented above and beyond

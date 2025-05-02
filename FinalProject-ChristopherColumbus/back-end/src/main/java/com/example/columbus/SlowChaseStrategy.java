@@ -17,7 +17,7 @@ public class SlowChaseStrategy implements MovementStrategy {
         int[] ccPosition = Game.getInstance().getColumbus().getPosition();
 
         int[] position = pirate.getPosition(); // Get position from pirate
-        int[] newPosition = position.clone();
+        int[] newPosition = position.clone(); // Clone position
 
         // Determine direction to move towards CC based on CC's position
         if (ccPosition[0] < position[0]) { // Move up if CC is above
@@ -69,7 +69,6 @@ public class SlowChaseStrategy implements MovementStrategy {
                     newPosition = tryMove(position, "down", "up");
                 }
             }
- 
             pirate.setPosition(newPosition);
             return;
         } 
@@ -88,9 +87,7 @@ public class SlowChaseStrategy implements MovementStrategy {
                     newPosition = tryMove(position, "down", "up");
                 }
             }
-
             pirate.setPosition(newPosition);
-
             return;
         }
     }

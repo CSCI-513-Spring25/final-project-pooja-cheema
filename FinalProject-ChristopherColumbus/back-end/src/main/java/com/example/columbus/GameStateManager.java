@@ -2,18 +2,29 @@ package com.example.columbus;
 
 import java.util.*;
 
+/**
+ * This class manages the overall game state, including CC ship,
+ * treasure location, collision detection, and cell occupancy
+ */
 public class GameStateManager {
-    private ColumbusShip columbus = new ConcreteColumbusShip();
-    private int[] treasurePosition = { 19, 19 };
-    private String collisionStatus = null;
-    private Set<String> occupied = new HashSet<>();
-    private static final int GRID_SIZE = 20;
+    private ColumbusShip columbus = new ConcreteColumbusShip(); // CC ship
+    private int[] treasurePosition = { 19, 19 }; // Default treasure location
+    private String collisionStatus = null; // Collision type (island/pirate etc.)
+    private Set<String> occupied = new HashSet<>(); // Track occupied grid cells 
+    private static final int GRID_SIZE = 20; // Grid size
     private EntityManager entityManager;
 
+    // Initializes default state (CC at 0,0)
     public GameStateManager() {
         occupied.add("0,0");
     }
 
+    /**
+     * Resets game state:
+     * - Resets Columbus to (0,0)
+     * - Generates a new treasure location
+     * - Clears all occupied cells
+     */
     public void reset() {
 
         columbus = new ConcreteColumbusShip();
@@ -26,11 +37,12 @@ public class GameStateManager {
         addOccupied(treasurePosition);
 
         collisionStatus = null;
-        occupied.clear();
+        occupied.clear(); // Clear tracker for occupied cells
         addOccupied(columbus.getPosition());
 
     }
 
+    // Handles player movement and updates game state
     public GameState handleMove(String direction, EntityManager em, ObserverManager om) {
         int[] newPosition = columbus.getPosition().clone();
 
@@ -50,21 +62,26 @@ public class GameStateManager {
                 break;
         }
 
+         // Island collision blocks movement
         if (em.isIsland(newPosition))
             return new GameState(columbus.getPosition(), treasurePosition, em.getPirates(), em.getMonsters(),
                     em.getIslands(),
                     "island", columbus);
+
+        // Monster collision: allow movement but mark it            
         if (em.isMonster(newPosition)) {
             columbus.setPosition(newPosition); // Update cc position
             om.notifyObservers(columbus.getPosition());
 
-            columbus.decrementCloak(); // Decrement invisibility duration
-            UnwrapColumbus(); // Replace decorator with base CC ship if cloak expired
+            columbus.decrementCloak(); // Decrement invisibility turns
+            UnwrapColumbus(); // Replace decorator CC ship with base CC ship if cloak expired
 
             return new GameState(columbus.getPosition(), treasurePosition, em.getPirates(), em.getMonsters(),
                     em.getIslands(),
                     "monster", columbus);
         }
+
+        // Pirate collision: reset game state
         if (em.isPirate(newPosition)) {
             reset();
             em.initializeEntities(om);
@@ -73,16 +90,16 @@ public class GameStateManager {
                     em.getIslands(),
                     "pirate", columbus);
         }
+
+        // Treasure collected
         if (Arrays.equals(newPosition, treasurePosition))
             return new GameState(columbus.getPosition(), treasurePosition, em.getPirates(), em.getMonsters(),
                     em.getIslands(),
                     "treasure", columbus);
+
         columbus.setPosition(newPosition); // Update cc position
-
         om.notifyObservers(columbus.getPosition());
-
         entityManager.getPirateGroup().decrementIgnoreTurns(); // Decrement invisibility turns
-
         columbus.decrementCloak(); // decrement invisibility cloak
         UnwrapColumbus(); // unwrap after cloak expires
 
@@ -90,10 +107,12 @@ public class GameStateManager {
                 em.getIslands(), null, columbus);
     }
 
+    // If pirate hijacks CC
     public void hijackByPirate() {
         this.collisionStatus = "pirate";
     }
 
+    // Clears all occupied cells except (0,0)
     public void clearOccupied() {
         occupied.clear();
         occupied.add("0,0");
@@ -103,6 +122,7 @@ public class GameStateManager {
         this.entityManager = em;
     }
 
+    // Returns current game state
     public GameState getState() {
         return new GameState(
                 columbus.getPosition(),
@@ -130,6 +150,7 @@ public class GameStateManager {
         return columbus.isInvisible();
     }
 
+    // Removes invisibility decorator if cloak duration is over
     public void UnwrapColumbus() {
         if (columbus instanceof InvisibleColumbusDecorator) {
             ColumbusShip unwrapped = ((InvisibleColumbusDecorator) columbus).unwrapIfExpired();
@@ -158,5 +179,4 @@ public class GameStateManager {
     public void setColumbus(ColumbusShip columbus) {
         this.columbus = columbus;
     }
-
 }

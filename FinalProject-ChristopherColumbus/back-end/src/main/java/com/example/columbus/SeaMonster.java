@@ -108,16 +108,19 @@ public class SeaMonster implements Entity {
         this.initialPosition = position.clone(); // So monster moves within 3x3 from actual spawn
     }
 
+    // Activate monster's ignore mode towards CC
     @Override
     public void activateIgnoreMode(int turns) {
         this.ignoreTurns = turns;
     }
 
+    // If ignoring CC
     @Override
     public boolean isIgnoringColumbus() {
         return ignoreTurns > 0;
     }
 
+    // Decrement ignore turns
     @Override
     public void decrementIgnoreTurns() {
         if (ignoreTurns > 0)
