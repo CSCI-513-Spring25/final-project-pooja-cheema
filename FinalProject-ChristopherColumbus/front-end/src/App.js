@@ -15,7 +15,6 @@ const App = () => {
     const [gameStarted, setGameStarted] = useState(false); // Tracks if game is in progress
     const [modalVisible, setModalVisible] = useState(false); // Controls modal dialog visibility
     const [collisionType, setCollisionType] = useState(''); // Stores collision happens with whom (pirate, monster)
-    // const navigate = useNavigate();
     const [showBalloonShower, setShowBalloonShower] = useState(false); // Show balloons on win
     const [tempMessage, setTempMessage] = useState(''); // Temporary toast message
     const [currentStrategy, setCurrentStrategy] = useState("slow");
@@ -208,7 +207,7 @@ const App = () => {
                                         return axios.get('http://localhost:8080/api/currentStrategy');
                                     })
                                     .then(res => {
-                                        setCurrentStrategy(res.data.strategy); // ✅ Update state
+                                        setCurrentStrategy(res.data.strategy); // Update state
                                         return axios.get('http://localhost:8080/api/state');
                                     })
                                     .then(response => setGameState(response.data))

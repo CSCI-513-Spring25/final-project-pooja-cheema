@@ -20,18 +20,21 @@ public class GameStateManagerTest {
         gsm.setEntityManager(em);
     }
 
+    // Test: Columbus starts at position (0, 0)
     @Test
     public void testInitialPosition() {
         int[] pos = gsm.getCcPosition();
         assertArrayEquals(new int[]{0, 0}, pos);
     }
 
+    // Test: resetting the game places Columbus back at (0, 0)
     @Test
     public void testResetPosition() {
         gsm.reset();
         assertArrayEquals(new int[]{0, 0}, gsm.getCcPosition());
     }
 
+    // Test: Prevents Columbus from moving above the top grid boundary
     @Test
     public void testMoveUpFromTopEdge() {
         gsm.getColumbus().setPosition(new int[]{0, 0});
@@ -39,6 +42,7 @@ public class GameStateManagerTest {
         assertArrayEquals(new int[]{0, 0}, state.getCcPosition());
     }
 
+    // Test: Columbus moves right from (0, 0) to (0, 1)
     @Test
     public void testMoveRight() {
         gsm.getColumbus().setPosition(new int[]{0, 0});
@@ -46,12 +50,14 @@ public class GameStateManagerTest {
         assertArrayEquals(new int[]{0, 1}, state.getCcPosition());
     }
 
+    // Test: treasure is not placed on Columbus’s starting position
     @Test
     public void testTreasureNotOnStart() {
         gsm.reset();
         assertFalse(Arrays.equals(gsm.getCcPosition(), gsm.getState().getTreasurePosition()));
     }
 
+    // Test: collision is reported when Columbus moves into an island
     @Test
     public void testCollisionWithIsland() {
         gsm.reset();
@@ -63,6 +69,7 @@ public class GameStateManagerTest {
         assertEquals("island", state.getCollisionStatus());
     }
 
+    // Test: monster collision is detected when moving into a monster's cell
     @Test
     public void testCollisionWithMonster() {
         gsm.getColumbus().setPosition(new int[]{5, 5});
@@ -79,6 +86,7 @@ public class GameStateManagerTest {
         assertEquals("monster", state.getCollisionStatus());
     }
 
+    // Test: pirate collision resets the game and is properly detected
     @Test
     public void testCollisionWithPirate() {
         gsm.getColumbus().setPosition(new int[]{5, 5});
@@ -91,6 +99,7 @@ public class GameStateManagerTest {
         assertEquals("pirate", state.getCollisionStatus());
     }
 
+    // Test: Columbus is unwrapped after invisibility cloak expires
     @Test
     public void testUnwrapColumbus() {
         ColumbusShip decorated = new InvisibleColumbusDecorator(new ConcreteColumbusShip(), 1);

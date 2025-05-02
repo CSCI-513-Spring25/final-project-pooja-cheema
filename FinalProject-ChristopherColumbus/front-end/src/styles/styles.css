@@ -12,24 +12,19 @@ body {
     flex-direction: row;
     align-items: center;
     overflow: auto;
-    /* padding-top: 500px;  */
 }
 
 .grid-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* padding-top: 500px;  */
 }
 
 .grid {
     display: grid;
-    /* grid-template-columns: repeat(10, 50px);
-    grid-template-rows: repeat(10, 50px); */
     grid-template-columns: repeat(20, 1fr);
     grid-template-rows: repeat(20, 1fr);
     border: 2px solid #000; 
-    /* gap: 1px; */
 }
 
 .row {
@@ -39,9 +34,7 @@ body {
 .cell {
     width: 50px;
     height: 50px;
-    /* border: 2px solid #ccc; */
     border: 2px solid #000000;
-    /* background: #a4cef3; */
     background: #bbf8f5;
     display: flex;
     align-items: center;
@@ -76,7 +69,6 @@ body {
 
 .island {
     width: 50px;
-    /* height: auto; */
     background: transparent;
 }
 
@@ -108,8 +100,6 @@ body {
 
 .go-back-button:hover {
     transform: translateY(5px);
-    /* Move up on hover */
-    /*  transform: translateX(-5px); /* Move left on hover */
     background: #f76a0d;
 }
 
@@ -124,7 +114,6 @@ body {
     padding: 16px 32px;
     border-radius: 10px;
     border-color:black;
-    /* box-shadow: 0 8px 24px rgba(0,0,0,0.18); */
     box-shadow: #da0f4c;
     z-index: 2000;
     font-size: 1.2rem;

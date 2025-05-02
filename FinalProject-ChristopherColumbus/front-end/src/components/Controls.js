@@ -104,7 +104,6 @@ const Controls = ({ onMove, showTempMessage, modalVisible, currentStrategy, setC
             <button className="up-button" onClick={() => move('up')}>Up</button>
             <button className="down-button" onClick={() => move('down')}>Down</button>
             <button className="reset-button" onClick={handleReset}>Reset Game</button>
-            {/* <IconManual /> */}
             <IconManual strategy={currentStrategy} />
             
         </div>
